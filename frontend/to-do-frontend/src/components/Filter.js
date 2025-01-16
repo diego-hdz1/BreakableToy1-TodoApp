@@ -1,4 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Filter(){
+
+    const navigator = useNavigate();
+
+    function addNewToDo(e){
+        e.preventDefault();
+        
+        navigator('/add-todo');
+
+    }
+    
     return (
         <div> 
             
@@ -19,7 +31,7 @@ export default function Filter(){
                 <button>Filter</button>
             </form>
             <form className="add-form">
-                <button>Add To Do</button>
+            <button onClick={addNewToDo}>Add To Do</button>
             </form>
         </div>
     );
