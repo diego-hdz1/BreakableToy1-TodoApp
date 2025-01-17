@@ -29,4 +29,8 @@ public class ToDoService {
     public ToDo undoneToDo(Long id) {
         return myRepo.undoneToDo(id);
     }
+
+    public ToDo getTodo(Long id) {
+        return myRepo.getTodo(id);
+    }
 }

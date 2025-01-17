@@ -6,7 +6,7 @@ const PaginationControll = () => (
       simple={{
         readOnly: true,
       }}
-      defaultCurrent={2}
+      defaultCurrent={1}
       total={50}
     />
   </>

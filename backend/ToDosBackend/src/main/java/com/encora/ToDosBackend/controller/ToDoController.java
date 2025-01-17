@@ -25,6 +25,12 @@ public class ToDoController {
         /// Filter by priority ///
     }
 
+    //To get the information when someone edit a To do
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<ToDo> getTodo(@PathVariable(required = true) Long id){
+        return new ResponseEntity<>(myService.getTodo(id), HttpStatus.OK);
+    }
+
     @PostMapping("/todos")
     public ResponseEntity<ToDo> createToDo(@RequestBody(required = true)ToDo task){
         return new ResponseEntity<>(myService.createToDo(task), HttpStatus.CREATED);

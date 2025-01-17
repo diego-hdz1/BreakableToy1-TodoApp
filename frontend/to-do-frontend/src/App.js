@@ -24,7 +24,7 @@ function App(){
             
             </Route>
             <Route path='/add-todo' element={ <ToDoData /> }></Route>
-            
+            <Route path='/edit-todo/:id' element={ <ToDoData /> }></Route>
           </Routes>
       </BrowserRouter>
     </div>
