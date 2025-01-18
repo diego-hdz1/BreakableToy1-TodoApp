@@ -33,4 +33,12 @@ public class ToDoService {
     public ToDo getTodo(Long id) {
         return myRepo.getTodo(id);
     }
+
+    public ToDo deleteToDo(Long id) {
+        return myRepo.deleteToDo(id);
+    }
+
+    public ToDo doneToDo(Long id) {
+        return myRepo.doneToDo(id);
+    }
 }

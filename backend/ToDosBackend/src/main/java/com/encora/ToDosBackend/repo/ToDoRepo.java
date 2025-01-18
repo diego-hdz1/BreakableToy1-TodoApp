@@ -3,8 +3,10 @@ package com.encora.ToDosBackend.repo;
 import com.encora.ToDosBackend.model.ToDo;
 import org.springframework.stereotype.Repository;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -41,6 +43,21 @@ public class ToDoRepo {
         return task;
     }
 
+    public ToDo doneToDo(Long id) {
+        for(ToDo temp : toDos){
+            if(temp.getId() == id){
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
+                System.out.println("Current Date and Time: " + formatter.format(date));
+                temp.setStatus(!temp.isStatus());
+                temp.setDoneDate(formatter.format(date));
+                break;
+            }
+        }
+        ToDo temp = new ToDo(); //I will eliminate this in the future, to not return an object
+        return temp;
+    }
+
     public ToDo undoneToDo(Long id) {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
@@ -57,6 +74,17 @@ public class ToDoRepo {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
                 return temp;
+            }
+        }
+        ToDo temp = new ToDo(); //I will eliminate this in the future, to not return an object
+        return temp;
+    }
+
+    public ToDo deleteToDo(Long id) {
+        ToDo removed;
+        for(int i=0;i<toDos.size();i++){
+            if(toDos.get(i).getId() == id){
+                removed = toDos.remove(i);
             }
         }
         ToDo temp = new ToDo(); //I will eliminate this in the future, to not return an object

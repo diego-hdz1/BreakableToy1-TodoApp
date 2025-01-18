@@ -5,8 +5,42 @@ import { useNavigate } from 'react-router-dom';
 
 function TableData(){
 
-  function prueba(record){
-    console.log(record)
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  /*
+  useEffect(()=>{
+    if(!shouldFetch) return;
+    if(id){
+      axios.put(`http://localhost:8080/todos/${record.id}/undone`).then((response) => { 
+        console.log(response.data);
+        navigator('/');
+    });
+    }else{
+      axios.put(`http://localhost:8080/todos/${record.id}/done`).then((response) => { 
+        console.log(response.data);
+        navigator('/');
+    });
+    }
+})*/
+
+  //Cuando le doy click esta mal, hay un error raro del use effect hook. Maximum depth exceeded
+  //Your Effect Depends On a Function That’s Declared Inside the Component
+  function setToDoStatus(record){
+    
+    // if(!record.status){ //Esta todavia activo
+    //   axios.put(`http://localhost:8080/todos/${record.id}/done`).then((response) => { 
+    //     console.log(response.data);
+    //     navigator('/');
+    // });
+    // }else{ //Se acaba de poner como terminada 
+    //   axios.put(`http://localhost:8080/todos/${record.id}/undone`).then((response) => { 
+    //     console.log(response.data);
+    //     navigator('/');
+    // });
+    // }
+    // console.log(record)
+    
+
   }
 
   const columns = [
@@ -18,7 +52,7 @@ function TableData(){
       //Ver ids de cada input
       render: (text, record) => (
         <div>
-          <input type="checkbox" id="cbox1" value="first_checkbox" onClick={()=>prueba(record)}/> 
+          <input type="checkbox" id="cbox1" value="first_checkbox" onClick={()=>setToDoStatus(record)}/> 
         </div>
       )
     },
@@ -27,6 +61,13 @@ function TableData(){
       dataIndex: 'text',
       align: 'center',
 
+      //CHECAR ESTO QUE NO FUNCIONA BIEN 
+      render: (text, record) => (
+        <span 
+        style={{textDecoration : !record.status ? 'line-through' : 'none', textDecorationThickness : '2px'}}>
+        {text}
+        </span>
+      )
     },
     {
       title: 'Priority',
@@ -66,7 +107,7 @@ function TableData(){
       render: (text, record) => (
         <div>
           <Button type='primary' onClick={()=> updateToDo(record.id)} style={{marginRight : 8}}>Editar</Button>
-          <Button type='danger' onClick={()=> console.log('Eliminar:', record)} style={{marginRight : 8, backgroundColor: 'red', color : 'white'}}>Eliminar</Button>
+          <Button type='danger' onClick={()=> deleteToDo(record.id)} style={{marginRight : 8, backgroundColor: 'red', color : 'white'}}>Eliminar</Button>
         </div>
       )
   
@@ -76,6 +117,13 @@ function TableData(){
 
   function updateToDo(toDoId){
     navigator(`/edit-todo/${toDoId}`);
+  }
+
+  function deleteToDo(toDoId){
+    axios.delete(`http://localhost:8080/todos/${toDoId}`).then((response) => { 
+      console.log(response.data);
+      navigator('/');
+  });
   }
 
   const onChange = (pagination, filters, sorter, extra) => {

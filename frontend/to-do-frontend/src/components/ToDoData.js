@@ -6,10 +6,10 @@ export default function ToDoData(){
 
     const [toDoName, setToDoName] = useState("");
     const [toDoDueDate, setToDoDueDate] = useState("");
-    //const [toDoDoneDate, setToDoDoneDate] = useState("");
     const [toDoPriority, setToDoPriority] = useState(0);
     const navigator = useNavigate();
     let randomId;
+    const {id} = useParams();
 
     function handleOnClick(e){
         e.preventDefault();
@@ -21,34 +21,29 @@ export default function ToDoData(){
         });
         
     }
-    
-    const {id} = useParams();
-    function Title(){
 
-        //Modificar para que se pueda editar datos, porque cada vez que se edita se vuelve a poner los mismos datos otra vez porque vuelve a llamar a la API
-        useEffect(()=>{
-            if(id){
-                const fetchTask = async () =>{
-                    try{
-                        const response = await axios.get(`http://localhost:8080/todos/${id}`);
-                        setToDoName(response.data.text);
-                        setToDoDueDate(response.data.dueDate);
-                        setToDoPriority(response.data.priority);
-                    }catch(err){
-                        console.log(err)
-                    }
-                };
-                fetchTask();
-            }
-            /*
+    function updateToDo(e){
+        e.preventDefault();
+        const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: "", priority: toDoPriority};
+        axios.put(`http://localhost:8080/todos/${id}`, newToDo).then((response) => { 
+            console.log(response.data);
+            navigator('/');
+        });
+    }
+    
+
+    //Modificar para que se pueda editar datos, porque cada vez que se edita se vuelve a poner los mismos datos otra vez porque vuelve a llamar a la API
+    useEffect(()=>{
+        if(id){
             axios.get(`http://localhost:8080/todos/${id}`).then((response)=>{
                 setToDoName(response.data.text);
                 setToDoDueDate(response.data.dueDate);
                 setToDoPriority(response.data.priority);
-            }).catch(error =>{console.log(error);})*/
-        })
+            }).catch(error =>{console.log(error);})
+        }
+    }, [id])
 
-
+    function Title(){
         if (id){
             return <h2>Update ToDo</h2>
         }
@@ -94,7 +89,7 @@ export default function ToDoData(){
                         </input>
                     </div>
                     
-                    <button onClick={handleOnClick}>Submit</button>
+                    <button onClick={id ? updateToDo : handleOnClick}>Submit</button>
                     <button onClick={()=>navigator('/')}>Cancel</button>
                 </form>
             </div>

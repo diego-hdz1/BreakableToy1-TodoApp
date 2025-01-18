@@ -43,13 +43,25 @@ public class ToDoController {
         //Checar que no regrese nada en el <> porque no es necesario
     }
 
-    //POST ?????
-//    @PostMapping("/todos/{id}/done")
-//    public ResponseEntity<ToDo> doneTask()
+    @PutMapping("/todos/{id}/done")
+    public ResponseEntity<ToDo> doneTask(@PathVariable(required = true)Long id){
+        return new ResponseEntity<>(myService.doneToDo(id), HttpStatus.OK);
+    }
 
     @PutMapping("/todos/{id}/undone")
     public ResponseEntity<ToDo> undoneTask(@PathVariable(required = true)Long id){
         return new ResponseEntity<>(myService.undoneToDo(id), HttpStatus.OK);
     }
+
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity<ToDo> deleteToDo(@PathVariable(required = true)Long id){
+        return new ResponseEntity<>(myService.deleteToDo(id), HttpStatus.OK);
+    }
+
+    //Pensar bien esto, para tomar las stats de aqui. pero debo de crear un nuevo objeto que devolver.
+//    @GetMapping("todos/stats")
+//    public ResponseEntity<ToDo> deleteToDo(){
+//        return new ResponseEntity<>(myService.getStats(), HttpStatus.OK);
+//    }
 
 }
