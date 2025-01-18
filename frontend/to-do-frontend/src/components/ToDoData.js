@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ToDoData(){
 
@@ -21,10 +21,43 @@ export default function ToDoData(){
         });
         
     }
+    
+    const {id} = useParams();
+    function Title(){
+
+        //Modificar para que se pueda editar datos, porque cada vez que se edita se vuelve a poner los mismos datos otra vez porque vuelve a llamar a la API
+        useEffect(()=>{
+            if(id){
+                const fetchTask = async () =>{
+                    try{
+                        const response = await axios.get(`http://localhost:8080/todos/${id}`);
+                        setToDoName(response.data.text);
+                        setToDoDueDate(response.data.dueDate);
+                        setToDoPriority(response.data.priority);
+                    }catch(err){
+                        console.log(err)
+                    }
+                };
+                fetchTask();
+            }
+            /*
+            axios.get(`http://localhost:8080/todos/${id}`).then((response)=>{
+                setToDoName(response.data.text);
+                setToDoDueDate(response.data.dueDate);
+                setToDoPriority(response.data.priority);
+            }).catch(error =>{console.log(error);})*/
+        })
+
+
+        if (id){
+            return <h2>Update ToDo</h2>
+        }
+        return <h2>Add ToDo</h2>
+    }
 
     return (
         <div> 
-            <h2>Add ToDo</h2>
+            {Title()}
             <div>
                 <form>
                     <div>
@@ -45,6 +78,7 @@ export default function ToDoData(){
                         placeholder="Enter due date"
                         name="tododuedate"
                         value={toDoDueDate}
+                        min={new Date().toISOString().split("T")[0]}
                         onChange={(e)=> setToDoDueDate(e.target.value)}>
                         </input>
                     </div>
@@ -61,6 +95,7 @@ export default function ToDoData(){
                     </div>
                     
                     <button onClick={handleOnClick}>Submit</button>
+                    <button onClick={()=>navigator('/')}>Cancel</button>
                 </form>
             </div>
         </div>
