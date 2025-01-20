@@ -3,7 +3,7 @@ import { Table, Button } from 'antd';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function TableData({data, setData, nameFilter, filterPriority, filterDone,pagination}){
+function TableData({data, setData, nameFilter, filterPriority, filterDone,pagination, ordenation, handleOrdenation}){
 
   const [shouldFetch, setShouldFetch] = useState(false);
   const location = useLocation();
@@ -28,21 +28,43 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
   //Your Effect Depends On a Function That’s Declared Inside the Component
   function setToDoStatus(record){
     
-    // if(!record.status){ //Esta todavia activo
-    //   axios.put(`http://localhost:8080/todos/${record.id}/done`).then((response) => { 
-    //     console.log(response.data);
-    //     navigator('/');
-    // });
-    // }else{ //Se acaba de poner como terminada 
-    //   axios.put(`http://localhost:8080/todos/${record.id}/undone`).then((response) => { 
-    //     console.log(response.data);
-    //     navigator('/');
-    // });
-    // }
-    // console.log(record)
+    if(!record.status){ //Esta todavia activo
+      axios.put(`http://localhost:8080/todos/${record.id}/done`).then((response) => { 
+        console.log(response.data);
+        navigator('/');
+    });
+    }else{ //Se acaba de poner como terminada 
+      axios.put(`http://localhost:8080/todos/${record.id}/undone`).then((response) => { 
+        console.log(response.data);
+        navigator('/');
+    });
+    }
+    console.log(record)
     
 
   }
+
+  function handlePriority(){
+    console.log(ordenation);
+    if(ordenation === 1){
+      handleOrdenation(ordenation + 1);
+    }else if(ordenation === 2){
+      handleOrdenation(ordenation + 1);
+    }else if(ordenation === 3){
+      handleOrdenation(1);
+    }
+    let url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
+      axios.get(url).then((response)=>{
+          setData(response.data);
+      }).catch(error =>{console.log(error);})
+      console.log(nameFilter, filterPriority, filterDone);
+      navigator('/');
+  }
+
+
+  // function handleDate(){
+
+  // }
 
   const columns = [
     {
@@ -61,8 +83,6 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
       title: 'Name',
       dataIndex: 'text',
       align: 'center',
-
-      //CHECAR ESTO QUE NO FUNCIONA BIEN 
       render: (text, record) => (
         <span 
         style={{textDecoration : !record.status ? 'line-through' : 'none', textDecorationThickness : '2px'}}>
@@ -76,9 +96,13 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
       align: 'center',
 
       sorter: {
-        compare: (a, b) => a.chinese - b.chinese,
-        multiple: 3,
+        //Solo para que muestre el mensaje y cambie el cursor en el header
       },
+      onHeaderCell: () => ({
+        onClick: () => handlePriority()
+      }),
+      
+      
     },
     {
       title: 'Due date',
@@ -135,8 +159,9 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
   
 
     useEffect(()=>{
+      console.log("Entro");
       //axios.get('http://localhost:8080/todos').then((response)=>{
-      axios.get(`http://localhost:8080/todos?text=${nameFilter}&priority=${filterPriority}&pagination=${pagination}`).then((response)=>{
+      axios.get(`http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`).then((response)=>{
       setData(response.data);
             
         }).catch(error =>{console.log(error);})

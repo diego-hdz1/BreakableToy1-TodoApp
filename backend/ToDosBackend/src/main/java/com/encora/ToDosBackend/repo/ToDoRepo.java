@@ -16,7 +16,15 @@ public class ToDoRepo {
             new ToDo(1L, "Primera tarea de la semana", "20/1/2025", false, "", 1),
             new ToDo(2L, "Segunda tarea de la semana", "29/1/2025", false, "", 2),
             new ToDo(3L, "Tercera tarea de la semana", "30/1/2025", false, "", 3),
-            new ToDo(4L, "Cuarta tarea de la semana", "2/2/2025", false, "", 2)
+            new ToDo(4L, "Cuarta tarea de la semana", "2/2/2025", true, "", 2),
+            new ToDo(5L, "Quinta tarea de la semana", "20/1/2025", false, "", 1),
+            new ToDo(6L, "Sexta tarea de la semana", "29/1/2025", true, "", 1),
+            new ToDo(7L, "Septima tarea de la semana", "30/1/2025", false, "", 3),
+            new ToDo(8L, "Ocatava tarea de la semana", "2/2/2025", false, "", 2),
+            new ToDo(9L, "Novena tarea de la semana", "20/1/2025", false, "", 1),
+            new ToDo(10L, "Decima tarea de la semana", "29/1/2025", true, "", 2),
+            new ToDo(11L, "Onceava tarea de la semana", "30/1/2025", false, "", 3),
+            new ToDo(12L, "Doceava tarea de la semana", "2/2/2025", false, "", 2)
     ));
 
     public List<ToDo> getTodos() {
@@ -24,9 +32,20 @@ public class ToDoRepo {
     }
 
     public ToDo createToDo(ToDo task) {
-        //Create a unique ID, going to do it by checking maximum id and add it 1
+        task.setId(generateId());
         toDos.add(task);
         return task;
+    }
+
+    //This function is in case that a ToDo is eliminated and the Id's can change
+    public Long generateId(){
+        Long id = 0L;
+        for(ToDo temp : toDos){
+            if(temp.getId()>id){
+                id = temp.getId();
+            }
+        }
+        return id+1;
     }
 
     public ToDo updateToDo(ToDo task, Long id) {
@@ -73,6 +92,7 @@ public class ToDoRepo {
     public ToDo getTodo(Long id) {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
+                System.out.println(temp.toString());
                 return temp;
             }
         }

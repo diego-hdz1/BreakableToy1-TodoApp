@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Filter({nameFilter, filterPriority, filterDone, pagination, handleNameFilter, handleFilterPriority, handleFilterDone, setData}){
+export default function Filter({nameFilter, filterPriority, filterDone, pagination, handleNameFilter, handleFilterPriority, handleFilterDone, setData, ordenation}){
 
     const navigator = useNavigate();
     
@@ -15,15 +15,16 @@ export default function Filter({nameFilter, filterPriority, filterDone, paginati
     function handleFilter(e){
         e.preventDefault();
         let url;
+        console.log(ordenation)
         if(filterDone === "All"){
-            url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}`;
+            url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
         }else{
-            url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}`;
+            url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
         }
         axios.get(url).then((response)=>{
             setData(response.data);
         }).catch(error =>{console.log(error);})
-        console.log(nameFilter, filterPriority, filterDone);
+        //console.log(nameFilter, filterPriority, filterDone);
     }
     
     return (
@@ -45,20 +46,6 @@ export default function Filter({nameFilter, filterPriority, filterDone, paginati
                 </select>
                 <button onClick={handleFilter}>Filter</button>
             </form>
-            
-            <div>
-                <form className="add-form">
-                    <h3>Order by priority or due date: </h3>
-                    <label
-                    ><input type="checkbox" id="cbox1" value="first_checkbox" /> Order by priority</label
-                    >
-
-                    <input type="checkbox" id="cbox2" value="second_checkbox" />
-                    <label for="cbox2">Order by due date</label>
-                    <button>Order</button>
-                </form>
-                
-            </div>
             <form className="add-form">
             <button onClick={addNewToDo}>Add To Do</button>
             </form>

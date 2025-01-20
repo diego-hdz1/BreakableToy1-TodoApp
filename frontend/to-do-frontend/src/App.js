@@ -15,7 +15,7 @@ function App(){
   const [filterPriority, setFilterPriority] = useState(0);
   const [filterDone, setFilterDone] = useState(null);
   const [pagination, setPagination] = useState(0);
-  const [ordenation, setOrdenation] = useState("");
+  const [ordenation, setOrdenation] = useState(1);
 
 
   //PARA LAS STATS PUEDE SER UN NUEVO OBJETO Y PUEDE LLEVAR UN PARAMETRO DE CUANTAS PAGINAS HAY EN LA LISTA PARA MANDARLAS AL PAGINATION!!
@@ -30,12 +30,14 @@ function App(){
             <div> 
               <Filter nameFilter={nameFilter} filterPriority={filterPriority} filterDone={filterDone} pagination={pagination}
               handleNameFilter={setNameFilter} handleFilterPriority={setFilterPriority} handleFilterDone={setFilterDone} setData = {setData}
+              ordenation={ordenation} handleOrdenation = {setOrdenation} 
               /> 
-              <TableData data={data} setData={setData}
-              nameFilter={nameFilter} filterPriority={filterPriority} filterDone={filterDone} pagination={pagination}
+              <TableData data={data} setData={setData} 
+              nameFilter={nameFilter} filterPriority={filterPriority} filterDone={filterDone} pagination={pagination} 
+              ordenation={ordenation} handleOrdenation = {setOrdenation}
               /> 
               <PaginationControll pagination={pagination} handlePagination={setPagination} handleData={setData} 
-              nameFilter={nameFilter} filterPriority={filterPriority} filterDone={filterDone}
+              nameFilter={nameFilter} filterPriority={filterPriority} filterDone={filterDone} ordenation={ordenation}
               /> 
 
             

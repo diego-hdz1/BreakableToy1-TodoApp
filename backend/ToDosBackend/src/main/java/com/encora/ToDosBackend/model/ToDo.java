@@ -1,23 +1,32 @@
 package com.encora.ToDosBackend.model;
 
-public class ToDo {
+public class ToDo implements Comparable<ToDo>{
     private Long id;
     private String text;
     private String dueDate; //Checar si es asi el tipo de datos
-    private boolean status;
+    private Boolean status;
     private String doneDate;
-    private int priority;
+    private Integer priority;
 
     public ToDo() {
     }
 
-    public ToDo(Long id, String text, String dueDate, boolean status, String doneDate, int priority) {
+    public ToDo(Long id, String text, String dueDate, Boolean status, String doneDate, Integer priority) {
         this.id = id;
         this.text = text;
         this.dueDate = dueDate;
         this.status = status;
         this.doneDate = doneDate;
         this.priority = priority;
+    }
+
+
+    @Override
+    public int compareTo(ToDo o) {
+        if(this.getPriority() > o.getPriority()) return -1;
+        if(this.getPriority() < o.getPriority()) return 1;
+        return 0;
+
     }
 
     public Long getId() {
@@ -44,11 +53,11 @@ public class ToDo {
         this.dueDate = dueDate;
     }
 
-    public boolean isStatus() {
+    public Boolean isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -60,11 +69,24 @@ public class ToDo {
         this.doneDate = doneDate;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
     public void setPriority(int priority) {
         this.priority = priority;
     }
+
+    @Override
+    public String toString() {
+        return "ToDo{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", dueDate='" + dueDate + '\'' +
+                ", status=" + status +
+                ", doneDate='" + doneDate + '\'' +
+                ", priority=" + priority +
+                '}';
+    }
+
 }

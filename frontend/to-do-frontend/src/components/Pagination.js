@@ -4,12 +4,13 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
 
-function PaginationControll({nameFilter, filterPriority, filterDone, pagination, handlePagination,handleData}){
+function PaginationControll({nameFilter, filterPriority, filterDone, pagination, handlePagination,handleData, ordenation}){
 
   const navigator = useNavigate();
   function getData(){
-    
-        let url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}`;
+        //let url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}`;
+
+        let url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
         axios.get(url).then((response)=>{
             handleData(response.data);
         }).catch(error =>{console.log(error);})
@@ -34,9 +35,9 @@ function PaginationControll({nameFilter, filterPriority, filterDone, pagination,
   //Aqui lo unico que debo de hacer es cambiar el estado de la pagination y capaz que hacer otro get para hacer el update de la data 
   //Cada vez que se pique un boton de paginacion es cuando se hace eso
   return(
-    <div>
+    <div className='add-form' style={{backgroundColor : "darksalmon"}}>
       <button onClick={decPagination}>--</button>
-      <span>{pagination+1}</span>
+      <h3>{pagination+1}</h3>
       <button onClick={incPagination}>++</button>
     </div>
   );
