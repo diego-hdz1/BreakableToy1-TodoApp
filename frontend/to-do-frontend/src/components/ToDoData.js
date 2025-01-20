@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function ToDoData(){
 
     const [toDoName, setToDoName] = useState("");
+
+    //LA DUE DATE PUEDE SER OPCIONAL AGREGAR ALGO PARA ESO
     const [toDoDueDate, setToDoDueDate] = useState("");
     const [toDoPriority, setToDoPriority] = useState(0);
     const navigator = useNavigate();
@@ -32,7 +34,7 @@ export default function ToDoData(){
     }
     
 
-    //Modificar para que se pueda editar datos, porque cada vez que se edita se vuelve a poner los mismos datos otra vez porque vuelve a llamar a la API
+    //ESTE GET NO SE MODIFICA PORQUE NO TIENE PARAMETROS
     useEffect(()=>{
         if(id){
             axios.get(`http://localhost:8080/todos/${id}`).then((response)=>{
@@ -76,6 +78,7 @@ export default function ToDoData(){
                         min={new Date().toISOString().split("T")[0]}
                         onChange={(e)=> setToDoDueDate(e.target.value)}>
                         </input>
+                        <button>ES OPCIONAL LA DUE DATE</button>
                     </div>
 
                     <div>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-function TableData(){
+function TableData({data, setData, nameFilter, filterPriority, filterDone,pagination}){
 
   const [shouldFetch, setShouldFetch] = useState(false);
+  const location = useLocation();
 
   /*
   useEffect(()=>{
@@ -120,6 +121,7 @@ function TableData(){
   }
 
   function deleteToDo(toDoId){
+    console.log(toDoId);
     axios.delete(`http://localhost:8080/todos/${toDoId}`).then((response) => { 
       console.log(response.data);
       navigator('/');
@@ -130,13 +132,15 @@ function TableData(){
     console.log('params', pagination, filters, sorter, extra);
   };
   
-  const [data, setData] = useState([]);
+  
 
     useEffect(()=>{
-        axios.get('http://localhost:8080/todos').then((response)=>{
-            setData(response.data);
+      //axios.get('http://localhost:8080/todos').then((response)=>{
+      axios.get(`http://localhost:8080/todos?text=${nameFilter}&priority=${filterPriority}&pagination=${pagination}`).then((response)=>{
+      setData(response.data);
+            
         }).catch(error =>{console.log(error);})
-    })
+    }, [location]);
     
     return(
         <Table columns={columns} dataSource={data}  onChange={onChange} pagination={false}/>
