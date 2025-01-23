@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Filter({nameFilter, filterPriority, filterDone, pagination, handleNameFilter, handleFilterPriority, handleFilterDone, setData, ordenation}){
+export default function Filter({nameFilter, filterPriority, filterDone, pagination, handleNameFilter, handleFilterPriority, handleFilterDone, setData, ordenation, dateSort}){
 
     const navigator = useNavigate();
     
@@ -11,20 +11,12 @@ export default function Filter({nameFilter, filterPriority, filterDone, paginati
         navigator('/add-todo');
     }
 
-    //Debo de obtener el get con todos los filtros y solo hago el update al setData con los resultados que obtenga de la API
     function handleFilter(e){
         e.preventDefault();
-        let url;
-        console.log(ordenation)
-        if(filterDone === "All"){
-            url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
-        }else{
-            url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
-        }
+        let url = `http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
         axios.get(url).then((response)=>{
             setData(response.data);
         }).catch(error =>{console.log(error);})
-        //console.log(nameFilter, filterPriority, filterDone);
     }
     
     return (
@@ -41,8 +33,8 @@ export default function Filter({nameFilter, filterPriority, filterDone, paginati
                 </select>
                 <select value={filterDone} onChange={(e)=>handleFilterDone(e.target.value)}>
                     <option value={"All"}>All</option>
-                    <option value={true}>Done</option>
-                    <option value={false}>Undone</option>
+                    <option value={"Done"}>Done</option>
+                    <option value={"Undone"}>Undone</option>
                 </select>
                 <button onClick={handleFilter}>Filter</button>
             </form>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+//import styles from "../ToDoData.module.css";
 
 export default function ToDoData(){
 
@@ -8,16 +9,17 @@ export default function ToDoData(){
 
     //LA DUE DATE PUEDE SER OPCIONAL AGREGAR ALGO PARA ESO
     const [toDoDueDate, setToDoDueDate] = useState("");
-    const [toDoPriority, setToDoPriority] = useState(0);
+    const [toDoPriority, setToDoPriority] = useState(1);
     const navigator = useNavigate();
     let randomId;
     const {id} = useParams();
 
     function handleOnClick(e){
         e.preventDefault();
-        randomId = Math.floor(Math.random() * (10000 - 100 + 1)) + 100;
-        const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: "", priority: toDoPriority};
-        axios.post('http://localhost:8080/todos', newToDo).then((response) => { 
+        const nowDate = new Date();
+        let localDate = new Date(nowDate.getTime()-(nowDate.getTimezoneOffset() * 60000));
+        const newToDo = {id: -1 ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
+        axios.post('http://localhost:9090/todos', newToDo).then((response) => { 
             console.log(response.data);
             navigator('/');
         });
@@ -26,18 +28,17 @@ export default function ToDoData(){
 
     function updateToDo(e){
         e.preventDefault();
-        const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: "", priority: toDoPriority};
-        axios.put(`http://localhost:8080/todos/${id}`, newToDo).then((response) => { 
+        const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority};
+        axios.put(`http://localhost:9090/todos/${id}`, newToDo).then((response) => { 
             console.log(response.data);
             navigator('/');
         });
-    }
-    
+    }    
 
     //ESTE GET NO SE MODIFICA PORQUE NO TIENE PARAMETROS
     useEffect(()=>{
         if(id){
-            axios.get(`http://localhost:8080/todos/${id}`).then((response)=>{
+            axios.get(`http://localhost:9090/todos/${id}`).then((response)=>{
                 setToDoName(response.data.text);
                 setToDoDueDate(response.data.dueDate);
                 setToDoPriority(response.data.priority);
@@ -53,7 +54,8 @@ export default function ToDoData(){
     }
 
     return (
-        <div> 
+        //className={styles.prueba}
+        <div > 
             {Title()}
             <div>
                 <form>
@@ -76,12 +78,12 @@ export default function ToDoData(){
                         name="tododuedate"
                         value={toDoDueDate}
                         min={new Date().toISOString().split("T")[0]}
-                        onChange={(e)=> setToDoDueDate(e.target.value)}>
+                        onChange={(e)=>setToDoDueDate(e.target.value)}>
                         </input>
                         <button>ES OPCIONAL LA DUE DATE</button>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label>To do priority:</label>
                         <input
                         type="number" //DEBO DE CAMBIAR ESTO PARA QUE SEA HIGH, LOW, MEDIUM, ETC. POR AHORA ASI PQ LO TENGO EN LA API
@@ -90,6 +92,15 @@ export default function ToDoData(){
                         value={toDoPriority}
                         onChange={(e)=> setToDoPriority(e.target.value)}>
                         </input>
+                    </div> */}
+
+                    <div>
+                        <label>To do priority:</label>
+                        <select value={toDoPriority} onChange={(e)=>setToDoPriority(e.target.value)}>
+                            <option value={1}>Low</option>
+                            <option value={2}>Medium</option>
+                            <option value={3}>High</option>
+                        </select>
                     </div>
                     
                     <button onClick={id ? updateToDo : handleOnClick}>Submit</button>

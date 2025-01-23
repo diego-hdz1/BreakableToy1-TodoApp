@@ -3,39 +3,23 @@ import { Table, Button } from 'antd';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function TableData({data, setData, nameFilter, filterPriority, filterDone,pagination, ordenation, handleOrdenation}){
+function TableData({data, setData, nameFilter, filterPriority, filterDone,pagination, ordenation, handleOrdenation, dateSort ,handleDateSort, fetchStats}){
 
   const [shouldFetch, setShouldFetch] = useState(false);
   const location = useLocation();
 
-  /*
-  useEffect(()=>{
-    if(!shouldFetch) return;
-    if(id){
-      axios.put(`http://localhost:8080/todos/${record.id}/undone`).then((response) => { 
-        console.log(response.data);
-        navigator('/');
-    });
-    }else{
-      axios.put(`http://localhost:8080/todos/${record.id}/done`).then((response) => { 
-        console.log(response.data);
-        navigator('/');
-    });
-    }
-})*/
-
-  //Cuando le doy click esta mal, hay un error raro del use effect hook. Maximum depth exceeded
-  //Your Effect Depends On a Function That’s Declared Inside the Component
   function setToDoStatus(record){
     
     if(!record.status){ //Esta todavia activo
-      axios.put(`http://localhost:8080/todos/${record.id}/done`).then((response) => { 
+      axios.put(`http://localhost:9090/todos/${record.id}/undone`).then((response) => { 
         console.log(response.data);
+        fetchStats();
         navigator('/');
     });
     }else{ //Se acaba de poner como terminada 
-      axios.put(`http://localhost:8080/todos/${record.id}/undone`).then((response) => { 
+      axios.put(`http://localhost:9090/todos/${record.id}/done`).then((response) => { 
         console.log(response.data);
+        fetchStats();
         navigator('/');
     });
     }
@@ -43,6 +27,8 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
     
 
   }
+
+    //CHECR CODIGO REPETIDO, PORQUE LA FUNCION ESTA Y DE ABAJO SON CASI IGUALES, TAL VEZ SE MANDA COMO PARAMETRO CUAL MODIFICAR
 
   function handlePriority(){
     console.log(ordenation);
@@ -53,7 +39,8 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
     }else if(ordenation === 3){
       handleOrdenation(1);
     }
-    let url = `http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`;
+    //PENSAR BIEN ESTO DE LOS QUE SE ORDENAN, PORQUE PUEDEN SER DIFERENTES  
+    let url = `http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
       axios.get(url).then((response)=>{
           setData(response.data);
       }).catch(error =>{console.log(error);})
@@ -61,10 +48,23 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
       navigator('/');
   }
 
+  //CHECR CODIGO REPETIDO, PORQUE LA FUNCION DE ARRIBA Y ESTA SON CASI IGUALES, TAL VEZ SE MANDA COMO PARAMETRO CUAL MODIFICAR
 
-  // function handleDate(){
-
-  // }
+  function handleDate(){
+    if(dateSort === 1){
+      handleDateSort(dateSort + 1);
+    }else if(dateSort === 2){
+      handleDateSort(dateSort + 1);
+    }else if(dateSort === 3){
+      handleDateSort(1);
+    }
+    let url = `http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
+      axios.get(url).then((response)=>{
+          setData(response.data);
+      }).catch(error =>{console.log(error);})
+      console.log(nameFilter, filterPriority, filterDone);
+      navigator('/');
+  }
 
   const columns = [
     {
@@ -75,7 +75,7 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
       //Ver ids de cada input
       render: (text, record) => (
         <div>
-          <input type="checkbox" id="cbox1" value="first_checkbox" onClick={()=>setToDoStatus(record)}/> 
+          <input type="checkbox" id="cbox1" value="first_checkbox" defaultChecked={!record.status} onClick={()=>setToDoStatus(record)}/> 
         </div>
       )
     },
@@ -101,6 +101,11 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
       onHeaderCell: () => ({
         onClick: () => handlePriority()
       }),
+      render: (text, record) => (
+        <span>
+        {text == 1 ? "Low" : text == 2 ? "Medium" : "High"}
+        </span>
+      )
       
       
     },
@@ -110,19 +115,31 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
       align: 'center',
 
       sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
+        //Solo para que se muestre el mensaje y cambie el cursor en el header
       },
+
+      //VALIDAR ESTO PORQUE PUEDE QUE NO HAYA DUE DATE Y SE SALE 
+      render: (text, record) => (
+        <span >
+        {text !== null ? text.substring(0,10) : null}
+        </span>
+      ),
+      onHeaderCell: () => ({
+        onClick: () => handleDate()
+      }),
     },
     {
       title: 'Done date',
       dataIndex: 'doneDate',
       align: 'center',
 
-      sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
-      },
+    },
+    ,
+    {
+      title: 'Creation date',
+      dataIndex: 'creationDate',
+      align: 'center',
+
     },
     {
       title: 'Actions',
@@ -146,8 +163,9 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
 
   function deleteToDo(toDoId){
     console.log(toDoId);
-    axios.delete(`http://localhost:8080/todos/${toDoId}`).then((response) => { 
+    axios.delete(`http://localhost:9090/todos/${toDoId}`).then((response) => { 
       console.log(response.data);
+      fetchStats();
       navigator('/');
   });
   }
@@ -160,15 +178,13 @@ function TableData({data, setData, nameFilter, filterPriority, filterDone,pagina
 
     useEffect(()=>{
       console.log("Entro");
-      //axios.get('http://localhost:8080/todos').then((response)=>{
-      axios.get(`http://localhost:8080/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&pagination=${pagination}&orderPriority=${ordenation}`).then((response)=>{
+      axios.get(`http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`).then((response)=>{
       setData(response.data);
-            
         }).catch(error =>{console.log(error);})
     }, [location]);
     
     return(
-        <Table columns={columns} dataSource={data}  onChange={onChange} pagination={false}/>
+        <Table columns={columns} dataSource={data}  onChange={onChange} pagination={false} rowKey={(record)=> record.id}/>
     );
 }
 
