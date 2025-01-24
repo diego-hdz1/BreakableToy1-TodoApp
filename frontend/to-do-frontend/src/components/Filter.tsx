@@ -1,31 +1,53 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Filter({nameFilter, filterPriority, filterDone, pagination, handleNameFilter, handleFilterPriority, handleFilterDone, setData, ordenation, dateSort}){
+interface FilterProps{
+    nameFilter: string;
+    filterPriority: number;
+    filterDone: string;
+    pagination: number;
+    handleNameFilter: (value : string) => void;
+    handleFilterPriority: (value: number) => void;
+    handleFilterDone: (value: string) => void;
+    setData: (data:any) => void;
+    ordenation: number;
+    dateSort: number;
+}
 
+const Filter: React.FC<FilterProps> = ({
+  nameFilter,
+  filterPriority,
+  filterDone,
+  pagination,
+  handleNameFilter,
+  handleFilterPriority,
+  handleFilterDone,
+  setData,
+  ordenation,
+  dateSort
+}) => {
     const navigator = useNavigate();
-    
-    function addNewToDo(e){
+
+    function addNewToDo(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();    
         navigator('/add-todo');
     }
 
-    function handleFilter(e){
+    function handleFilter(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         let url = `http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
         axios.get(url).then((response)=>{
             setData(response.data);
         }).catch(error =>{console.log(error);})
     }
-    
+
     return (
         <div> 
             
             <form className="add-form">
                 <h3>Choose your options to filter</h3>
                 <input type="text" placeholder="Name..." value={nameFilter} onChange={(e)=>handleNameFilter(e.target.value)}></input>
-                <select value={filterPriority} onChange={(e)=>handleFilterPriority(e.target.value)}>
+                <select value={filterPriority} onChange={(e)=>handleFilterPriority(Number(e.target.value))}>
                     <option value={0}>All</option>
                     <option value={1}>Low</option>
                     <option value={2}>Medium</option>
@@ -43,4 +65,7 @@ export default function Filter({nameFilter, filterPriority, filterDone, paginati
             </form>
         </div>
     );
+
 }
+
+export default Filter;
