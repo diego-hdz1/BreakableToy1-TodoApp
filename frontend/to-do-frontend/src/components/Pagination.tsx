@@ -2,6 +2,7 @@ import React from 'react';
 import { Pagination } from 'antd';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import {PORT} from "../ToDoService";
 
 interface PaginationControllProps{
   nameFilter: string;
@@ -31,7 +32,7 @@ const PaginationControll: React.FC<PaginationControllProps> = ({
   const navigator = useNavigate();
 
   function getData(){
-    let url = `http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
+    let url = `http://localhost:${PORT}/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
     axios.get(url).then((response)=>{
         handleData(response.data);
     }).catch(error =>{console.log(error);})

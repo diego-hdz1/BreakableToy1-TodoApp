@@ -15,12 +15,12 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-public class ToDoController {
+public class ToDoController implements ToDoControllerInterface{
 
     @Autowired
     ToDoService toDoService;
 
-    @GetMapping("/todos")
+    @Override
     public ResponseEntity<List<ToDo>> getTodos(
             @RequestParam(required = false) String nameFilter,
             @RequestParam(required = false) Integer priorityFilter,
@@ -34,35 +34,34 @@ public class ToDoController {
     }
 
     //To get the information when someone edit a To do
-    @GetMapping("/todos/{id}")
+    @Override
     public ResponseEntity<ToDo> getTodo(@PathVariable(required = true) Long id){
         return new ResponseEntity<>(toDoService.getTodo(id), HttpStatus.OK);
     }
 
-    @PostMapping("/todos")
+    @Override
     public ResponseEntity<ToDo> createToDo(@RequestBody(required = true)ToDo task){
         return new ResponseEntity<>(toDoService.createToDo(task), HttpStatus.CREATED);
     }
 
-    @PutMapping("/todos/{id}")
+    @Override
     public ResponseEntity<ToDo> createToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id){
-        //LocalDateTime formatter = task.setDueDate(LocalDate.parse(task.getDoneDate()).atTime());
         return new ResponseEntity<>(toDoService.updateToDo(task, id), HttpStatus.OK);
 
         //Checar que no regrese nada en el <> porque no es necesario
     }
 
-    @PutMapping("/todos/{id}/done")
+    @Override
     public ResponseEntity<ToDo> doneTask(@PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.doneToDo(id), HttpStatus.OK);
     }
 
-    @PutMapping("/todos/{id}/undone")
+    @Override
     public ResponseEntity<ToDo> undoneTask(@PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.undoneToDo(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/todos/{id}")
+    @Override
     public ResponseEntity<Boolean> deleteToDo(@PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.deleteToDo(id), HttpStatus.OK);
     }

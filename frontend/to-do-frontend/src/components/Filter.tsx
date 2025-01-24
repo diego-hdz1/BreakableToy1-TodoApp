@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {PORT} from "../ToDoService";
 
 interface FilterProps{
     nameFilter: string;
@@ -35,7 +36,7 @@ const Filter: React.FC<FilterProps> = ({
 
     function handleFilter(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
-        let url = `http://localhost:9090/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
+        let url = `http://localhost:${PORT}/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
         axios.get(url).then((response)=>{
             setData(response.data);
         }).catch(error =>{console.log(error);})

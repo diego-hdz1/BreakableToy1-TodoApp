@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 public class ToDo {
     private Long id;
     private String text;
-    private LocalDate dueDate; //Checar si es asi el tipo de datos
+    private LocalDate dueDate;
     private Boolean status;
     private LocalDateTime doneDate;
     private Integer priority;
-    //    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime creationDate;
 
     public ToDo() {
@@ -28,15 +27,6 @@ public class ToDo {
         this.priority = priority;
         this.creationDate = creationDate;
     }
-
-
-//    @Override
-//    public int compareTo(ToDo o) {
-//        if(this.getPriority() > o.getPriority()) return -1;
-//        if(this.getPriority() < o.getPriority()) return 1;
-//        return 0;
-//
-//    }
 
     public Long getId() {
         return id;

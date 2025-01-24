@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public class ToDoRepo {
+public class ToDoRepo implements ToDoRepoInterface{
 
     List<ToDo> toDos = new ArrayList<>(Arrays.asList(
             new ToDo(1L, "Primera tarea de la semana", null, false, LocalDateTime.of(2025,1,31,22,10), 1, LocalDateTime.of(2025,1,10, 19, 20)),
@@ -29,10 +29,15 @@ public class ToDoRepo {
             new ToDo(12L, "Doceava tarea de la semana", LocalDate.of(2025,3,17), true, null, 2, LocalDateTime.of(2025,1,12, 10, 10))
     ));
 
+    @Override
     public List<ToDo> getTodos() {
+        for(ToDo temp:toDos){
+            System.out.println(temp.toString());
+        }
         return toDos;
     }
 
+    @Override
     public ToDo createToDo(ToDo task) {
         task.setId(generateId());
         toDos.add(task);
@@ -40,17 +45,15 @@ public class ToDoRepo {
     }
 
     //This function is in case that a ToDo is eliminated and the Id's can change
-    //CHECARLA
+    @Override
     public Long generateId(){
-        Long id = 0L;
-        for(ToDo temp : toDos){
-            if(temp.getId()>id){
-                id = temp.getId();
-            }
-        }
-        return id+1;
+        return toDos.stream()
+                .mapToLong(ToDo::getId)
+                .max()
+                .orElse(0L)+1;
     }
 
+    @Override
     public ToDo updateToDo(ToDo task, Long id) {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
@@ -65,12 +68,10 @@ public class ToDoRepo {
         return task;
     }
 
+    @Override
     public ToDo doneToDo(Long id) {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
-                //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                //Date date = new Date();
-                //System.out.println("Current Date and Time: " + formatter.format(date));
                 temp.setStatus(!temp.isStatus());
                 temp.setDoneDate(LocalDateTime.now());
                 break;
@@ -80,6 +81,7 @@ public class ToDoRepo {
         return temp;
     }
 
+    @Override
     public ToDo undoneToDo(Long id) {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
@@ -92,6 +94,7 @@ public class ToDoRepo {
         return temp;
     }
 
+    @Override
     public ToDo getTodo(Long id) {
         for(ToDo temp : toDos){
             if(temp.getId() == id){
@@ -103,6 +106,7 @@ public class ToDoRepo {
         return temp;
     }
 
+    @Override
     public Boolean deleteToDo(Long id) {
         ToDo removed;
         for(int i=0;i<toDos.size();i++){
