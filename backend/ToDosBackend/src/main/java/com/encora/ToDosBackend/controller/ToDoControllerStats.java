@@ -1,8 +1,6 @@
 package com.encora.ToDosBackend.controller;
 
-import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.model.ToDoStats;
-import com.encora.ToDosBackend.service.ToDoService;
 import com.encora.ToDosBackend.service.ToDoStatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

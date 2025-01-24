@@ -8,10 +8,6 @@ public class ToDoStats {
     private Long averageHighTime;
     private int numberPages;
 
-    public ToDoStats(){
-
-    }
-
     @Override
     public String toString() {
         return "ToDoStats{" +

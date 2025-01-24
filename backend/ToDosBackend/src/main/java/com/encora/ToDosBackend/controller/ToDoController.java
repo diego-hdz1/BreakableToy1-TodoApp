@@ -1,24 +1,20 @@
 package com.encora.ToDosBackend.controller;
 
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.model.ToDoStats;
-import com.encora.ToDosBackend.service.ToDoService;
-import com.encora.ToDosBackend.service.ToDoStatsService;
+import com.encora.ToDosBackend.service.ToDoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-public class ToDoController implements ToDoControllerInterface{
+public class ToDoController implements ToDoApi {
 
     @Autowired
-    ToDoService toDoService;
+    ToDoServiceImpl toDoService;
 
     @Override
     public ResponseEntity<List<ToDo>> getTodos(

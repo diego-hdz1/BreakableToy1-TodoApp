@@ -5,7 +5,6 @@ import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.repo.ToDoRepo;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +16,11 @@ class ToDosRepoTest {
 
     @Autowired
     private ToDoRepo toDoRepo;
+
+    @Test
+    public void testGenerateId(){
+
+    }
 
     @Test
     public void testDeleteById(){
@@ -33,5 +37,27 @@ class ToDosRepoTest {
         ToDo savedToDo = toDoRepo.createToDo(todo);
         assertEquals("First test", toDoRepo.getTodo(id).getText());
     }
+
+    @Test
+    public void testDoneToDo(){
+
+    }
+
+    @Test
+    public void testUndoneToDo(){
+
+    }
+
+    @Test
+    public void TestUpdateToDo(){
+
+    }
+
+    @Test
+    public void testCreateToDo(){
+
+    }
+
+
 
 }

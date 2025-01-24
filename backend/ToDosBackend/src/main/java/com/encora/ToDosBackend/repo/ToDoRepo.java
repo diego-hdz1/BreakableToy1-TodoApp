@@ -32,7 +32,7 @@ public class ToDoRepo implements ToDoRepoInterface{
     @Override
     public List<ToDo> getTodos() {
         for(ToDo temp:toDos){
-            System.out.println(temp.toString());
+            System.out.println(temp.toString()); //Quitar esto despues
         }
         return toDos;
     }
