@@ -1,32 +1,31 @@
 package com.encora.ToDosBackend.model;
 
-public class ToDo implements Comparable<ToDo>{
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class ToDo {
     private Long id;
     private String text;
-    private String dueDate; //Checar si es asi el tipo de datos
+    private LocalDate dueDate;
     private Boolean status;
-    private String doneDate;
+    private LocalDateTime doneDate;
     private Integer priority;
+    private LocalDateTime creationDate;
 
     public ToDo() {
     }
 
-    public ToDo(Long id, String text, String dueDate, Boolean status, String doneDate, Integer priority) {
+    public ToDo(Long id, String text, LocalDate dueDate, Boolean status, LocalDateTime doneDate, Integer priority, LocalDateTime creationDate) {
         this.id = id;
         this.text = text;
         this.dueDate = dueDate;
         this.status = status;
         this.doneDate = doneDate;
         this.priority = priority;
-    }
-
-
-    @Override
-    public int compareTo(ToDo o) {
-        if(this.getPriority() > o.getPriority()) return -1;
-        if(this.getPriority() < o.getPriority()) return 1;
-        return 0;
-
+        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -45,11 +44,11 @@ public class ToDo implements Comparable<ToDo>{
         this.text = text;
     }
 
-    public String getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -61,11 +60,11 @@ public class ToDo implements Comparable<ToDo>{
         this.status = status;
     }
 
-    public String getDoneDate() {
+    public LocalDateTime getDoneDate() {
         return doneDate;
     }
 
-    public void setDoneDate(String doneDate) {
+    public void setDoneDate(LocalDateTime doneDate) {
         this.doneDate = doneDate;
     }
 
@@ -75,6 +74,14 @@ public class ToDo implements Comparable<ToDo>{
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
