@@ -41,10 +41,8 @@ public class ToDoController implements ToDoApi {
     }
 
     @Override
-    public ResponseEntity<ToDo> createToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id){
+    public ResponseEntity<ToDo> updateToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.updateToDo(task, id), HttpStatus.OK);
-
-        //Checar que no regrese nada en el <> porque no es necesario
     }
 
     @Override

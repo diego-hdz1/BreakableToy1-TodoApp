@@ -24,7 +24,7 @@ public interface ToDoApi {
     ResponseEntity<ToDo> createToDo(@RequestBody(required = true)ToDo task);
 
     @PutMapping("/todos/{id}")
-    ResponseEntity<ToDo> createToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id);
+    ResponseEntity<ToDo> updateToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id);
 
     @PutMapping("/todos/{id}/done")
     ResponseEntity<ToDo> doneTask(@PathVariable(required = true)Long id);

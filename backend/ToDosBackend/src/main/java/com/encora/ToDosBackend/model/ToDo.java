@@ -96,4 +96,8 @@ public class ToDo {
                 '}';
     }
 
+    public ToDo deepCopy(){
+        return new ToDo(this.id, this.text, this.dueDate, this.status, this.doneDate, this.priority, this.creationDate);
+    }
+
 }

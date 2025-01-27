@@ -32,6 +32,7 @@ function App(){
 
 
   const fetchStats = async() => {
+    console.log("Asdsa")
     try{
       const response = await axios.get<StatsData>("http://localhost:9090/todos/stats");
       setStats(response.data);
@@ -48,8 +49,7 @@ function App(){
     <div>
       <BrowserRouter>
         <Header />
-          <Routes>
-            
+          <Routes >
             <Route path='/' element={ 
             <div> 
               <Filter 
@@ -83,13 +83,14 @@ function App(){
               dateSort={dateSort} 
               /> 
 
-              {stats && <Stats stats={stats} setStats={setStats}/>}
+              {/* setStats={setStats} */}
+              {stats && <Stats stats={stats} />}
               
             </div> }>
             
             </Route>
-            <Route path='/add-todo' element={ <ToDoData /> }></Route>
-            <Route path='/edit-todo/:id' element={ <ToDoData /> }></Route>
+            <Route path='/add-todo' element={ <ToDoData fetchStats = {fetchStats}/> }></Route>
+            <Route path='/edit-todo/:id' element={ <ToDoData fetchStats = {fetchStats} /> }></Route>
           </Routes>
       </BrowserRouter>
     </div>
