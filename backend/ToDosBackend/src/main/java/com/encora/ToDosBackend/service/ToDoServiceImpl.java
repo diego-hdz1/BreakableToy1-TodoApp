@@ -61,17 +61,23 @@ public class ToDoServiceImpl implements ToDoService {
     @Override
     public List<ToDo> orderTodos(List<ToDo> todos, Integer orderPriority , Integer orderDate){
         if(orderPriority == 1 && orderDate == 1) return todos;
-        else if(orderPriority == 3) {
-            todos.sort(Comparator.comparingInt(ToDo::getPriority));
-        }else if(orderPriority ==2){
-            todos.sort(Comparator.comparingInt(ToDo::getPriority).reversed());
-        }
 
-        //CHECAR BIEN QUE SE PUEDAN LOS DOS AL MISMO TIEMPO
-        if(orderDate == 3){
-            todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));
-        }else if(orderDate ==2){
-            todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());
+        if(orderPriority == 3 && orderDate ==1) {todos.sort(Comparator.comparingInt(ToDo::getPriority));}
+        else if(orderPriority ==2 && orderDate == 1) {todos.sort(Comparator.comparingInt(ToDo::getPriority).reversed());}
+        else if(orderPriority == 1 && orderDate == 3) {todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));}
+        else if(orderPriority ==1 && orderDate ==2) {todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());}
+        else if(orderPriority == 2 && orderDate == 2){
+            todos.sort(Comparator.comparing(ToDo::getPriority).reversed()
+                    .thenComparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));
+        }else if(orderPriority == 2 && orderDate == 3){
+            todos.sort(Comparator.comparing(ToDo::getPriority)
+                    .thenComparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());
+        }else if(orderPriority == 3 && orderDate ==2){
+            todos.sort(Comparator.comparing(ToDo::getPriority).reversed()
+                    .thenComparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)));
+        }else if(orderPriority == 3 && orderDate == 3){
+            todos.sort(Comparator.comparingInt(ToDo::getPriority)
+                    .thenComparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo).reversed()));
         }
         return todos;
     }

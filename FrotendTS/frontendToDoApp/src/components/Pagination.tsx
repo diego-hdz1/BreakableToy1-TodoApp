@@ -54,7 +54,7 @@ const PaginationControll: React.FC<PaginationControllProps> = ({
     return(
       <div className='add-form' style={{backgroundColor : "#e5771f"}}>
         <button onClick={decPagination}>&larr;</button>
-        <h3 >{pagination+1}</h3>
+        <h3 >Page #{pagination+1}</h3>
         <button onClick={incPagination}>&rarr;</button>
       </div>
     );

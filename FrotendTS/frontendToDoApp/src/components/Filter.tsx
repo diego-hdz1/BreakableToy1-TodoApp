@@ -36,18 +36,24 @@ const Filter: React.FC<FilterProps> = ({
 
     function handleFilter(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
-        let url = `http://localhost:${PORT}/todos?nameFilter=${nameFilter}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
+        let validatedName = nameFilter.replace(/[^a-zA-Z0-9]/gu,'');
+        // if(nameFilter.includes('#')){handleNameFilter("a");}
+
+        // if(nameFilter.includes('#') || nameFilter.includes('[') || nameFilter.includes(']') || nameFilter.includes('^')) {validatedName='';}
+        handleNameFilter(validatedName);
+        // console.log(validatedName);
+        // console.log(nameFilter);
+        let url = `http://localhost:${PORT}/todos?nameFilter=${validatedName}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
         axios.get(url).then((response)=>{
             setData(response.data);
         }).catch(error =>{console.log(error);})
     }
-
+    
     return (
         <div> 
-            
             <form className="add-form">
                 <h3>Choose your options to filter</h3>
-                <input type="text" placeholder="Name..." value={nameFilter} onChange={(e)=>handleNameFilter(e.target.value)}></input>
+                <input type="text" placeholder="Name..." value={nameFilter} onChange={(e)=>handleNameFilter(e.target.value)} maxLength={120}></input>
                 <select value={filterPriority} onChange={(e)=>handleFilterPriority(Number(e.target.value))}>
                     <option value={0}>All</option>
                     <option value={1}>Low</option>

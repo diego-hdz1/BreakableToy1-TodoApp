@@ -1,19 +1,26 @@
-# BreakableToy1-TodoApp
+# Breakable Toy1 - Todo App
 
-Tecnologias extras instaladas
+##Overview
+This application helps users manage their tasks efficiently by allowing them to create, edit and delete To-Dos.
+Each To-Do consists of a name, priority level, and an optional due date.
+Users can filter tasks by name, priority and status (Completed or in progress), and osrt them based on the due date and/or priority.
+Additionally, the app provides statistics on the average time taken to complete a To-Do to allow users to manage more effectively their time.
+This project implements a RESTful API to manage To-Dos CRUD operations
 
-- antd
-Libreria de componentes reutilizables en React. Se usa para utilizar y personalizar componentes ya creados en tus proyectos. 
+## Technologies used
 
-(https://ant.design)
+- **Backend** Java, Spring Boot, Junit, Mockito
+- **Frontend** React, Typescript, React, Ant Design, Axios, Vitest, React Router DOM
 
-- axios 
+## Running the project
+1. **Backend:** Runs on port `9090`.
+2. **Frontend:** Runs on port `8080`.
 
-Ayuda al manejo de solicitudes http, en este caso, para consumir la API RESTful. Ademas realiza la conversion a JSON de forma automatica
-(https://axios-http.com/es/docs/intro)
+Follow the instructions in each subdirectory (backend and frontend to run the respectie components)
 
-- React-router-dom
-
-Es un router creado para React que facilita la navegacion a URL's en donde se puede cargar componentes especificos o navegar a una URL
-
-(https://reactrouter.com)
+## Instalation and set up
+1. Clone the repository:
+```bash
+git clone https://github.com/diego-hdz1/BreakableToy1-TodoApp.git
+cd to-do-app
+```

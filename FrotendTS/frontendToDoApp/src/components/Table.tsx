@@ -95,6 +95,18 @@ const TableData: React.FC<TableDataProps> = ({
         navigator('/');
     });
     }
+
+    const goodLookingDate = (dueDate:string):any =>{
+      const givenDueDate: any = new Date(dueDate);
+      const currentDate: any = new Date();
+      if(dueDate === "" || dueDate == null){
+        return {backgroundColor:"white"}
+      }
+      // const finalDate: number = givenDueDate - currentDate ;
+      // console.log(finalDate);
+
+
+    }
   
 
     const columns: any[] = [
@@ -142,9 +154,12 @@ const TableData: React.FC<TableDataProps> = ({
         sorter: {
           //Solo para que se muestre el mensaje y cambie el cursor en el header
         },
+        onCell: (record:ToDo) =>({
+          style: goodLookingDate(record.dueDate),
+        }),
         render: (text:string, record:ToDo) => (
-          <span >
-          {text !== null ? text.substring(0,10) : null}
+          <span>
+          {text !== null ? text.substring(0,10) : ""}
           </span>
         ),
         onHeaderCell: () => ({
@@ -168,10 +183,13 @@ const TableData: React.FC<TableDataProps> = ({
         align: 'center',
         
         render: (_:any, record:ToDo) => (
+          <>
+          {record.status === true ? (
           <div>
             <Button type='primary' onClick={()=> updateToDo(record.id)} style={{marginRight : 8}}>Editar</Button>
             <Button type='primary' danger onClick={()=> deleteToDo(record.id)} style={{marginRight : 8, backgroundColor: 'red', color : 'white'}}>Eliminar</Button>
-          </div>
+          </div>) : (<span></span>)}
+          </>
         )
     
       },

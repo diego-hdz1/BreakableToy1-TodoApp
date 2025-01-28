@@ -31,9 +31,6 @@ public class ToDoRepo implements ToDoRepoInterface{
 
     @Override
     public List<ToDo> getTodos() {
-        for(ToDo temp:toDos){
-            System.out.println(temp.toString()); //Quitar esto despues
-        }
         return toDos;
     }
 
@@ -70,40 +67,39 @@ public class ToDoRepo implements ToDoRepoInterface{
 
     @Override
     public ToDo doneToDo(Long id) {
+        ToDo found = new ToDo();
         for(ToDo temp : toDos){
             if(temp.getId() == id){
                 temp.setStatus(!temp.isStatus());
                 temp.setDoneDate(LocalDateTime.now());
-                break;
+                return temp;
             }
         }
-        ToDo temp = new ToDo(); //I will eliminate this in the future, to not return an object
-        return temp;
+        return found;
     }
 
     @Override
     public ToDo undoneToDo(Long id) {
+        ToDo found = new ToDo();
         for(ToDo temp : toDos){
             if(temp.getId() == id){
                 temp.setStatus(!temp.isStatus());
                 temp.setDoneDate(null);
-                break;
+                return temp;
             }
         }
-        ToDo temp = new ToDo(); //I will eliminate this in the future, to not return an object
-        return temp;
+        return found;
     }
 
     @Override
     public ToDo getTodo(Long id) {
+        ToDo found = new ToDo();
         for(ToDo temp : toDos){
             if(temp.getId() == id){
-                System.out.println(temp.toString());
                 return temp;
             }
         }
-        ToDo temp = new ToDo(); //I will eliminate this in the future, to not return an object
-        return temp;
+        return found;
     }
 
     @Override

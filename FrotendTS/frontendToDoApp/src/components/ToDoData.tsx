@@ -3,8 +3,13 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import {PORT} from '../constants';
 
+interface ToDoDataProps{
+    fetchStats: () => void;
+}
 
-const ToDoData: React.FC = () =>{
+const ToDoData:React.FC<ToDoDataProps> = ({
+    fetchStats
+}) =>{
 
     const [toDoName, setToDoName] = useState("");
     const [toDoDueDate, setToDoDueDate] = useState("");
@@ -19,6 +24,7 @@ const ToDoData: React.FC = () =>{
         let localDate = new Date(nowDate.getTime()-(nowDate.getTimezoneOffset() * 60000));
         const newToDo = {id: -1 ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
         axios.post(`http://localhost:${PORT}/todos`, newToDo).then((response) => { 
+            fetchStats();
             navigator('/');
         });
         
@@ -26,8 +32,10 @@ const ToDoData: React.FC = () =>{
 
     function updateToDo(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
+        
         const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority};
         axios.put(`http://localhost:${PORT}/todos/${id}`, newToDo).then((response) => { 
+            fetchStats();
             navigator('/');
         });
     }    
@@ -49,12 +57,17 @@ const ToDoData: React.FC = () =>{
         return <h2>Add ToDo</h2>
     }
 
+    function clearDueDate(){
+        setToDoDueDate("");
+    }
+
     return (
-        <div > 
-            {Title()}
-            <div>
-                <form>
-                    <div>
+        <div className="addToDoForm"> 
+            <div><h2>{Title()}</h2></div>
+            
+            {/* <div> */}
+                <form className="form">
+                    <div className="form-group">
                         <label>To do name:</label>
                         <input
                         type="text"
@@ -65,7 +78,7 @@ const ToDoData: React.FC = () =>{
                         </input>
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>To do due date:</label>
                         <input
                         type="date"
@@ -75,9 +88,12 @@ const ToDoData: React.FC = () =>{
                         min={new Date().toISOString().split("T")[0]}
                         onChange={(e)=>setToDoDueDate(e.target.value)}>
                         </input>
-                        <button>ES OPCIONAL LA DUE DATE</button>
+                        <div className="checkbox-container">
+                            <label>Check here to not use a due date</label>
+                            <input type="checkbox" onClick={clearDueDate}></input>
+                        </div>
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>To do priority:</label>
                         <select value={toDoPriority} onChange={(e)=>setToDoPriority(Number(e.target.value))}>
                             <option value={1}>Low</option>
@@ -87,10 +103,10 @@ const ToDoData: React.FC = () =>{
                     </div>
                     
                     <button onClick={id ? updateToDo : handleOnClick}>Submit</button>
-                    <button onClick={()=>navigator('/')}>Cancel</button>
+                    <button className="cancel" onClick={()=>navigator('/')}>Cancel</button>
                 </form>
             </div>
-        </div>
+        // </div>
     );
 }
 export default ToDoData;
