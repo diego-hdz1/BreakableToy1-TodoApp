@@ -2,6 +2,7 @@ package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.ToDosBackendApplication;
 import com.encora.ToDosBackend.model.ToDo;
+import com.encora.ToDosBackend.model.ToDoStats;
 import com.encora.ToDosBackend.repo.ToDoRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +25,9 @@ public class ToDosServiceTest {
 
     @InjectMocks
     private ToDoServiceImpl toDoService;
+
+    @InjectMocks
+    private ToDoStatsService toDoStatsService;
 
     private List<ToDo> mockTodos;
 
@@ -89,7 +93,64 @@ public class ToDosServiceTest {
         assertEquals(LocalDate.of(2025,2,1), Ordered.get(0).getDueDate());
     }
 
-    //DateNull ????
+    @Test
+    void testOrderByDateDescAndOrderDateDesc(){
+        List<ToDo> Ordered = toDoService.orderTodos(mockTodos, 2, 2);
+        assertEquals(LocalDate.of(2025,2,1), Ordered.get(0).getDueDate());
+    }
+
+    @Test
+    void testOrderByDateDescAndOrderDateAsc(){
+        List<ToDo> Ordered = toDoService.orderTodos(mockTodos, 2, 3);
+        assertEquals(LocalDate.of(2025,2,1), Ordered.get(0).getDueDate());
+    }
+
+    @Test
+    void testOrderByDateAscAndOrderDateAsc(){
+        List<ToDo> Ordered = toDoService.orderTodos(mockTodos, 3, 3);
+        assertNull(Ordered.get(0).getDueDate());
+    }
+
+    @Test
+    void testDoneToDo(){
+        ToDo existingToDo = new ToDo();
+        existingToDo.setId(100L);
+        existingToDo.setDoneDate(null);
+        existingToDo.setStatus(false);
+        when(toDoRepo.doneToDo(100L)).thenReturn(existingToDo);
+        ToDo result = toDoService.doneToDo(100L);
+        assertNotNull(result);
+        assertEquals(result.getId(), existingToDo.getId());
+        verify(toDoRepo, times(1)).doneToDo(100L);
+
+
+    }
+
+    @Test
+    void testUndoneToDo(){
+        ToDo existingToDo = new ToDo();
+        existingToDo.setId(100L);
+        existingToDo.setDoneDate(LocalDateTime.of(2024,1,1,1,1));
+        existingToDo.setStatus(true);
+        when(toDoRepo.undoneToDo(100L)).thenReturn(existingToDo);
+        ToDo result = toDoService.undoneToDo(100L);
+        assertNotNull(result);
+        assertEquals(result.getId(), existingToDo.getId());
+        assertNull(result.getDueDate());
+        verify(toDoRepo, times(1)).undoneToDo(100L);
+    }
+
+    @Test
+    void getToDo(){
+        ToDo existingToDo = new ToDo();
+        existingToDo.setId(100L);
+        when(toDoRepo.getTodo(100L)).thenReturn(existingToDo);
+        ToDo result = toDoService.getTodo(100L);
+        assertNotNull(result);
+        assertEquals(result.getId(), existingToDo.getId());
+        verify(toDoRepo, times(1)).getTodo(100L);
+    }
+
 
     @Test
     void testOrderByPriorityAndDateDesc(){
@@ -97,8 +158,6 @@ public class ToDosServiceTest {
         assertEquals(3, Ordered.get(0).getPriority());
         assertEquals(LocalDate.of(2025,2,1), Ordered.get(0).getDueDate());
     }
-
-    //ACABAR LAS DUE DATE EN LA IMPLEMENTACION
 
     @Test
     void testCreateToDo(){
@@ -125,9 +184,22 @@ public class ToDosServiceTest {
     @Test
     void testDeleteToDo(){
         when(toDoRepo.deleteToDo(1L)).thenReturn(true);
-
         Boolean result = toDoService.deleteToDo(1L);
         assertEquals(true, result);
+    }
+
+    @Test
+    void testStatsService(){
+        when(toDoRepo.getTodos()).thenReturn(mockTodos);
+        ToDoStats finalStats  = toDoStatsService.getStats();
+        assertNotNull(finalStats);
+    }
+
+    @Test
+    void testValidationException(){
+        String error = "This is a validation error";
+        ValidationException exception = new ValidationException(error);
+        assertEquals(error, exception.getMessage());
     }
 
 }

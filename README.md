@@ -1,6 +1,6 @@
 # Breakable Toy1 - Todo App
 
-##Overview
+## Overview
 This application helps users manage their tasks efficiently by allowing them to create, edit and delete To-Dos.
 Each To-Do consists of a name, priority level, and an optional due date.
 Users can filter tasks by name, priority and status (Completed or in progress), and osrt them based on the due date and/or priority.
