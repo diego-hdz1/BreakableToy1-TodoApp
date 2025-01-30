@@ -177,17 +177,6 @@ const TableData: React.FC<TableDataProps> = ({
         }),
       },
       {
-        title: 'Done date',
-        dataIndex: 'doneDate',
-        align: 'center',
-      },
-      ,
-      {
-        title: 'Creation date',
-        dataIndex: 'creationDate',
-        align: 'center',
-      },
-      {
         title: 'Actions',
         dataIndex: 'actions',
         align: 'center',

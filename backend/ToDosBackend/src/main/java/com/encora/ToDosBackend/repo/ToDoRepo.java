@@ -15,19 +15,19 @@ import java.util.List;
 public class ToDoRepo implements ToDoRepoInterface{
 
     List<ToDo> toDos = new ArrayList<>(Arrays.asList(
-            new ToDo(1L, "Primera tarea de la semana", null, false, LocalDateTime.of(2025,1,31,22,10), 1, LocalDateTime.of(2025,1,10, 19, 20)),
-            new ToDo(2L, "Segunda tarea de la semana", LocalDate.of(2025,1,31), false, LocalDateTime.of(2025,1,31,22,10), 2, LocalDateTime.of(2025,1,11, 11,35)),
-            new ToDo(3L, "Tercera tarea de la semana", LocalDate.of(2025,2,1), false, LocalDateTime.of(2025,1,31,22,10), 3, LocalDateTime.of(2025,1,12,17, 11)),
-            new ToDo(4L, "Cuarta tarea de la semana", LocalDate.of(2025,2,4), true, null, 2, LocalDateTime.of(2025,1,12, 20, 32)),
-            new ToDo(5L, "Quinta tarea de la semana", LocalDate.of(2025,2,5), true, null, 1, LocalDateTime.of(2025,1,13, 11, 12)),
-            new ToDo(6L, "Sexta tarea de la semana", LocalDate.of(2025,1,26), true, null, 1, LocalDateTime.of(2025,1,11, 15, 41)),
-            new ToDo(7L, "Septima tarea de la semana", LocalDate.of(2025,2,6), true, null, 3, LocalDateTime.of(2025,1,9, 10, 12)),
-            new ToDo(8L, "Ocatava tarea de la semana", LocalDate.of(2025,3,15), true, null, 2, LocalDateTime.of(2025,1,13, 17, 22)),
-            new ToDo(9L, "Novena tarea de la semana", LocalDate.of(2025,2,20), true, null, 1, LocalDateTime.of(2025,1,12, 18, 38)),
-            new ToDo(10L, "Decima tarea de la semana", LocalDate.of(2025,2,22), true, null, 2, LocalDateTime.of(2025,1,10, 19, 21)),
-            new ToDo(11L, "Onceava tarea de la semana", LocalDate.of(2025,3,11), true, null, 3, LocalDateTime.of(2025,1,11, 14, 10)),
-            new ToDo(12L, "Doceava tarea de la semana", LocalDate.of(2025,3,17), true, null, 2, LocalDateTime.of(2025,1,12, 10, 10)),
-            new ToDo(13L, "Acabar tarea de la semana", LocalDate.of(2025,3,22), true, null, 1, LocalDateTime.of(2025,1,22, 12, 52))
+            new ToDo(1L, "First task of the week", null, false, LocalDateTime.of(2025,1,31,22,10), 1, LocalDateTime.of(2025,1,10, 19, 20)),
+            new ToDo(2L, "Second task of the week", LocalDate.of(2025,1,31), false, LocalDateTime.of(2025,1,31,22,10), 2, LocalDateTime.of(2025,1,11, 11,35)),
+            new ToDo(3L, "Third task of the week", LocalDate.of(2025,2,1), false, LocalDateTime.of(2025,1,31,22,10), 3, LocalDateTime.of(2025,1,12,17, 11)),
+            new ToDo(4L, "Fourth task of the week", LocalDate.of(2025,2,4), true, null, 2, LocalDateTime.of(2025,1,12, 20, 32)),
+            new ToDo(5L, "Fifth task of the week", LocalDate.of(2025,2,5), true, null, 1, LocalDateTime.of(2025,1,13, 11, 12)),
+            new ToDo(6L, "Sixth task of the week", LocalDate.of(2025,1,26), true, null, 1, LocalDateTime.of(2025,1,11, 15, 41)),
+            new ToDo(7L, "Learn React Context", LocalDate.of(2025,2,6), true, null, 3, LocalDateTime.of(2025,1,9, 10, 12)),
+            new ToDo(8L, "School homework", LocalDate.of(2025,3,15), true, null, 2, LocalDateTime.of(2025,1,13, 17, 22)),
+            new ToDo(9L, "Finish Tech Log", LocalDate.of(2025,2,20), true, null, 1, LocalDateTime.of(2025,1,12, 18, 38)),
+            new ToDo(10L, "Learn about Azure", LocalDate.of(2025,2,22), true, null, 2, LocalDateTime.of(2025,1,10, 19, 21)),
+            new ToDo(11L, "Draw", LocalDate.of(2025,3,11), true, null, 3, LocalDateTime.of(2025,1,11, 14, 10)),
+            new ToDo(12L, "Go to the office", LocalDate.of(2025,3,17), true, null, 2, LocalDateTime.of(2025,1,12, 10, 10)),
+            new ToDo(13L, "Finish reading book", LocalDate.of(2025,3,22), true, null, 1, LocalDateTime.of(2025,1,22, 12, 52))
     ));
 
     @Override

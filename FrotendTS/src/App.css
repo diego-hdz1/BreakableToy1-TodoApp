@@ -12,15 +12,11 @@ html{
 
 h1{
   text-align: center;
-  /* e5771f #fca156*/
-  /* background-color: #f89448; 4b7674*/
   background-color: #203939;
-  /* font-family: "Monoton"; */
   font-family: 'Cambria';
   font-weight: bold;
   font-size: 6rem;
   text-transform: uppercase;
-  /* font-weight: 400; */
   word-spacing: 35px;
   letter-spacing: 1px;
   padding: 0.25em;
@@ -32,7 +28,6 @@ h2{
 }
 
 .add-form{
-  /* background-color: antiquewhite; */
   background-color: #4b7674;
   padding: 2.8rem;
   display: flex;
@@ -79,7 +74,6 @@ button:hover, select:hover{
 
 .stats{
   font-family: 'Arial';
-  /* background-color: antiquewhite; */
   background-color: #203939;
   text-align: center;
   font-weight: 700;

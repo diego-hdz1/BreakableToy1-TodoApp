@@ -23,10 +23,6 @@ const defaultProps ={
   }
 }
 
-// vi.mock('react-router-dom', ()=>({
-//     ...vi.importActual('react-router-dom') as object,
-//     useNavigate: vi.fn(()=>vi.fn()),
-// }));
 
 describe('Pagination test controll', () => {
     it('should call handle pagination when pagination previous button is clicked', () => {

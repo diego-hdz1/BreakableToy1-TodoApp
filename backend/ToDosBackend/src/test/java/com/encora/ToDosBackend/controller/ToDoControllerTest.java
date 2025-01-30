@@ -113,7 +113,6 @@ public class ToDoControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newTodo)));
 
         result.andExpect(MockMvcResultMatchers.status().isOk())
-                //.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is((newTodo.getId().intValue()))))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -127,7 +126,6 @@ public class ToDoControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newTodo)));
 
         result.andExpect(MockMvcResultMatchers.status().isOk());
-                //.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is((newTodo.getId().intValue()))))
     }
 
     @Test
