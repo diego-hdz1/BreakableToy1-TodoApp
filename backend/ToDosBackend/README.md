@@ -18,6 +18,15 @@ The backend handles the business logic such as filtering, sorting and pagination
 - **Junit:** For writing and running unit tests
 - **Mockito:** For mocking dependencies in tests
 
+## Prerequisites
+Before running the project, make sure you have **JDK 17 or higher** installed.
+This project was developed using JDK v23.0.1
+
+### Check if JDK is installed:
+```bash
+java -version
+```
+
 ## Running the backend
 1. Install dependencies and build the project
 ```bash

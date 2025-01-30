@@ -19,6 +19,15 @@ This is the frontend of the To-Do App, developed using **React** and **TypeScrip
 - **Axios:** Manages HTTP requests to the backend API
 - **Vitest:** Framework used for unit testing
 
+## Prerequisites
+Before running the project, make sure you have **Node.js** installed.
+This project was developed using Node v22.12.0
+
+### Check if Node.js is installed:
+```bash
+node -v
+```
+
 ## Running the frontend
 1. Install dependencies:
 ```bash
