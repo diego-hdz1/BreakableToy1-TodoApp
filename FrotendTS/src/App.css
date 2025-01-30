@@ -12,23 +12,35 @@ html{
 
 h1{
   text-align: center;
-  background-color: antiquewhite;
-  font-family: "Monoton";
+  /* e5771f #fca156*/
+  /* background-color: #f89448; 4b7674*/
+  background-color: #203939;
+  /* font-family: "Monoton"; */
+  font-family: 'Cambria';
+  font-weight: bold;
   font-size: 6rem;
   text-transform: uppercase;
-  font-weight: 400;
+  /* font-weight: 400; */
   word-spacing: 35px;
   letter-spacing: 1px;
   padding: 0.25em;
+  color: rgba(241, 233, 233, 0.974);
+}
+
+h2{
+  color: rgba(241, 233, 233, 0.974);
 }
 
 .add-form{
-  background-color: #e5771f;
+  /* background-color: antiquewhite; */
+  background-color: #4b7674;
   padding: 2.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+  color: white;
+  color: rgba(241, 233, 233, 0.909);
 }
 
 h3{
@@ -37,7 +49,7 @@ h3{
 }
 
 button, select, input{
-  background-color: #ffebb3;
+  background-color: rgb(241, 233, 233);
   color: #5a3e2b;
   font-family: inherit;
   border: none;
@@ -46,6 +58,11 @@ button, select, input{
   font-weight: 700;
   font-size: 1.8rem;
   cursor: pointer;
+  border: 1.2px solid #031d38;
+}
+
+button:hover, select:hover{
+  background-color: #d7e1fb;
 }
 
 .add-from button{
@@ -54,34 +71,38 @@ button, select, input{
 }
 
 .pagination{
+  font-family: 'Verdana';
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .stats{
-  background-color: antiquewhite;
+  font-family: 'Arial';
+  /* background-color: antiquewhite; */
+  background-color: #203939;
   text-align: center;
   font-weight: 700;
   padding: 3.2rem 0;
   font-size: 1.5rem;
+  color: rgba(229, 213, 213, 0.852);
 }
 
 .stats h3{
-  color: #d07c44;
+  color: rgba(255, 255, 255, 0.866);
 }
 
 
 .addToDoForm{
-  background-color: antiquewhite;
   padding-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  background-color: #f4f4f4;
+  background-color: #4b7674;
   font-family: 'Times New Roman', Times, serif;
+  
 }
 
 .addToDoForm h2{
@@ -104,6 +125,7 @@ button, select, input{
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  
 }
 
 .form-group label{
@@ -115,16 +137,14 @@ button, select, input{
 
 .form-group input,
 .form-group select{
+  background-color: rgba(241, 233, 233, 0.944);
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 18px;
   width: 100%;
-  background-color: antiquewhite;
   color: black;
-  /* text-align: center;
-  align-content: center;
-  align-items: center; */
+  
 }
 
 .checkbox-container{
@@ -138,11 +158,13 @@ button, select, input{
   width: 22px;
   height: 22px;
   accent-color: #05274b;
-  border: 2px solid #031d38;
-  
+  border: 6px solid #031d38;
   border-radius: 4px;
   cursor: pointer;
+  background-color: black;
+
 }
+
 
 .checkbox-container label{
   font-weight: bold;
@@ -150,19 +172,6 @@ button, select, input{
   font-size: 18px;
   margin-right: 8px;
 }
-
-
-
-
-/* .addToDoForm .form input,
-.addToDoForm .form select{
-  width: 100px !important;
-  padding: 12px !important;
-  margin: 10px 0 !important;
-  border: 1px solid #ccc !important;
-  border-radius: 8px !important;
-  font-size: 16px !important;
-} */
 
 .form button{
   background: #007bff;
@@ -182,4 +191,3 @@ button, select, input{
 .form .cancel:hover{
   background: #dc3545;
 }
-

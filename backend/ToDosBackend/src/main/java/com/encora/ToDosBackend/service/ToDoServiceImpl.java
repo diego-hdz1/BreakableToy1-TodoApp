@@ -28,7 +28,7 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public List<ToDo> filterTodos(List<ToDo> todos, String nameFilter, Integer priorityFilter, String filterDone) {
-        if(nameFilter == null && priorityFilter == null && filterDone == null) return todos; //Cehcar el filterDone
+        if(nameFilter == null && priorityFilter == null && filterDone == null) return todos;
         Boolean checkFilter;
         if(Objects.equals(filterDone, "Done")) checkFilter = false;
         else if(Objects.equals(filterDone, "Undone")) checkFilter = true;
@@ -50,7 +50,7 @@ public class ToDoServiceImpl implements ToDoService {
         int lowerBound = pagination*pageSize;
         int upperBound = (pagination+1)*pageSize;
 
-        if(totalTodos < upperBound){ //Si hay menos todos que el valor total
+        if(totalTodos < upperBound){
             upperBound = totalTodos;
         }
 
@@ -84,14 +84,34 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public ToDo createToDo(ToDo task) {
-        //Validation !!!
+        validateToDo(task);
         return toDoRepo.createToDo(task);
     }
 
     @Override
     public ToDo updateToDo(ToDo task, Long id) {
+        validateToDo(task);
         return toDoRepo.updateToDo(task, id);
     }
+
+    public void validateToDo(ToDo task){
+        if(task.getText() == null || task.getText().isEmpty()){
+            throw new ValidationException("Name cannot be empty");
+        }
+        if(task.getPriority() == null){
+            throw new ValidationException("Priority cannot be empty");
+        }
+        if(task.isStatus() == null){
+            throw new ValidationException("Status cannot be empty");
+        }
+        if(task.getDueDate() != null){
+            LocalDate currentDate = LocalDate.now();
+            if(currentDate.isAfter(task.getDueDate())){
+                throw new ValidationException("Due date cannot be a date that has already passed");
+            }
+        }
+    }
+
 
     @Override
     public ToDo undoneToDo(Long id) {

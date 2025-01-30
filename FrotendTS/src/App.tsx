@@ -32,7 +32,6 @@ function App(){
 
 
   const fetchStats = async() => {
-    console.log("Asdsa")
     try{
       const response = await axios.get<StatsData>("http://localhost:9090/todos/stats");
       setStats(response.data);

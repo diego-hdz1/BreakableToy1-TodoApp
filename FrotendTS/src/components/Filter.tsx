@@ -36,13 +36,8 @@ const Filter: React.FC<FilterProps> = ({
 
     function handleFilter(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
-        let validatedName = nameFilter.replace(/[^a-zA-Z0-9]/gu,'');
-        // if(nameFilter.includes('#')){handleNameFilter("a");}
-
-        // if(nameFilter.includes('#') || nameFilter.includes('[') || nameFilter.includes(']') || nameFilter.includes('^')) {validatedName='';}
-        handleNameFilter(validatedName);
-        // console.log(validatedName);
-        // console.log(nameFilter);
+        handleNameFilter(nameFilter);
+        let validatedName = encodeURIComponent(nameFilter);
         let url = `http://localhost:${PORT}/todos?nameFilter=${validatedName}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
         axios.get(url).then((response)=>{
             setData(response.data);

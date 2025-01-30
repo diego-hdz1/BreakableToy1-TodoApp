@@ -14,27 +14,6 @@ describe('Stats', () => {
         expect(screen.getByText(/45 minutes/i)).toBeInTheDocument();
     });
 
-    // it("Renders form correctly", async()=>{
-    //     render(<Stats stats={stats}/>);
-    //     await waitFor(() => {
-    //         expect(screen.findAllByRole("listitem")).toHaveLength(3);
-    //     })
-    // });
-    
-
-    // it("Renders average medium time", ()=>{
-    //     render(<Stats stats={stats}/>);
-    //     expect(screen.getByText(/40 minutes/i)).toBeInTheDocument();
-    //expect(screen.getAllByRole("contentinfo")).toHaveClass("stats");
-    // });
-
-    // it("Renders times by priority", ()=>{
-    //     render(<Stats stats={stats}/>);
-    //     expect(screen.getByText(/Low: 30 minutes/i)).toBeInTheDocument();
-    //     expect(screen.getByText(/Medium: 40/i)).toBeInTheDocument();
-    //     expect(screen.getByText(/High: 59/i)).toBeInTheDocument();
-    // });
-
     it("Renders structure", ()=>{
         render(<Stats stats={stats}/>);
         expect(screen.getAllByRole("listitem")).toHaveLength(6);

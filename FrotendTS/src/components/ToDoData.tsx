@@ -10,7 +10,7 @@ interface ToDoDataProps{
 const ToDoData:React.FC<ToDoDataProps> = ({
     fetchStats
 }) =>{
-
+    const [errors, setErrors] = useState(false);
     const [toDoName, setToDoName] = useState("");
     const [toDoDueDate, setToDoDueDate] = useState("");
     const [toDoPriority, setToDoPriority] = useState(1);
@@ -20,24 +20,32 @@ const ToDoData:React.FC<ToDoDataProps> = ({
 
     function handleOnClick(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
-        const nowDate = new Date();
-        let localDate = new Date(nowDate.getTime()-(nowDate.getTimezoneOffset() * 60000));
-        const newToDo = {id: -1 ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
-        axios.post(`http://localhost:${PORT}/todos`, newToDo).then((response) => { 
-            fetchStats();
-            navigator('/');
-        });
-        
+        if(toDoName == "" || toDoName == null){
+            setErrors(true);
+        }else{
+            setErrors(false);
+            const nowDate = new Date();
+            let localDate = new Date(nowDate.getTime()-(nowDate.getTimezoneOffset() * 60000));
+            const newToDo = {id: -1 ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
+            axios.post(`http://localhost:${PORT}/todos`, newToDo).then((response) => { 
+                fetchStats();
+                navigator('/');
+            });
+        }
     }
 
     function updateToDo(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
-        
-        const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority};
-        axios.put(`http://localhost:${PORT}/todos/${id}`, newToDo).then((response) => { 
-            fetchStats();
-            navigator('/');
-        });
+        if(toDoName == "" || toDoName == null){
+            setErrors(true);
+        }else{
+            setErrors(false);
+            const newToDo = {id: randomId ,text: toDoName, dueDate: toDoDueDate, status: true, doneDate: null, priority: toDoPriority};
+            axios.put(`http://localhost:${PORT}/todos/${id}`, newToDo).then((response) => { 
+                fetchStats();
+                navigator('/');
+            });
+        }
     }    
 
     useEffect(()=>{
@@ -54,7 +62,7 @@ const ToDoData:React.FC<ToDoDataProps> = ({
         if (id){
             return <h2>Update ToDo</h2>
         }
-        return <h2>Add ToDo</h2>
+        return <h2>Add To Do</h2>
     }
 
     function clearDueDate(){
@@ -63,9 +71,7 @@ const ToDoData:React.FC<ToDoDataProps> = ({
 
     return (
         <div className="addToDoForm"> 
-            <div><h2>{Title()}</h2></div>
-            
-            {/* <div> */}
+            <div>{Title()}</div>
                 <form className="form">
                     <div className="form-group">
                         <label>To do name:</label>
@@ -76,6 +82,7 @@ const ToDoData:React.FC<ToDoDataProps> = ({
                         value={toDoName}
                         onChange={(e)=> setToDoName(e.target.value)}>
                         </input>
+                        {errors && (<label style={{color:"red"}}>You need to enter a name</label>)}
                     </div>
 
                     <div className="form-group">

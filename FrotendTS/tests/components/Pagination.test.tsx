@@ -19,7 +19,7 @@ const defaultProps ={
   ordenation: 0,
   dateSort: 0,
   stats:{
-    numberPages: {numberPages:5},
+    numberPages: 5,
   }
 }
 
@@ -65,7 +65,7 @@ describe('Pagination test controll', () => {
                 <Pagination {...defaultProps}/>
             </MemoryRouter>
         );
-        expect(screen.getAllByText('2')[0]).toBeInTheDocument();
+        expect(screen.getAllByText('Page 2')[0]).toBeInTheDocument();
     });
 
     it('calls next pagination button correctly', () => {

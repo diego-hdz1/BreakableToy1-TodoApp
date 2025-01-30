@@ -4,6 +4,7 @@ import type {TableColumnsType, TableProps} from 'antd';
 import axios from "axios";
 import { To, useLocation, useNavigate } from 'react-router-dom';
 import {PORT} from '../constants';
+import { Color } from 'antd/es/color-picker';
 
 interface ToDo{
   id: number;
@@ -102,13 +103,22 @@ const TableData: React.FC<TableDataProps> = ({
       if(dueDate === "" || dueDate == null){
         return {backgroundColor:"white"}
       }
-      // const finalDate: number = givenDueDate - currentDate ;
-      // console.log(finalDate);
-
-
+      const finalDate: number = givenDueDate - currentDate ;
+      const finalDateToDays: number = finalDate / 1000 / 60 / 60 / 24;
+      if(finalDateToDays < 0){ //Already due date is passed
+        return {backgroundColor:"#455A64"}
+      }
+      else if(finalDateToDays >= 0 && finalDateToDays <7){
+        return {backgroundColor:"#F28B82"}
+      }
+      else if(finalDateToDays >= 7 && finalDateToDays <14){
+        return {backgroundColor:"#F6BF82"}
+      }
+      else if(finalDateToDays >= 14){
+        return {backgroundColor:"#A8D5BA"}
+      }
     }
   
-
     const columns: any[] = [
       {
         title: 'Done',
@@ -152,7 +162,7 @@ const TableData: React.FC<TableDataProps> = ({
         align: 'center',
   
         sorter: {
-          //Solo para que se muestre el mensaje y cambie el cursor en el header
+          //Just to get the "click" message when hovering in the header
         },
         onCell: (record:ToDo) =>({
           style: goodLookingDate(record.dueDate),

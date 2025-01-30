@@ -2,6 +2,7 @@ package com.encora.ToDosBackend.controller;
 
 import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.service.ToDoServiceImpl;
+import com.encora.ToDosBackend.service.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,9 @@ public class ToDoController implements ToDoApi {
             @RequestParam(required = false) Integer orderPriority,
             @RequestParam(required = false) Integer orderDate
     ){
-                //SE DEBE DE VALIDAR EN EL FRONT LOS CASOS ESPECIALES
         return new ResponseEntity<>(toDoService.getTodos(nameFilter, priorityFilter, filterDone, pagination, orderPriority, orderDate), HttpStatus.OK);
     }
 
-    //To get the information when someone edit a To do
     @Override
     public ResponseEntity<ToDo> getTodo(@PathVariable(required = true) Long id){
         return new ResponseEntity<>(toDoService.getTodo(id), HttpStatus.OK);
@@ -37,12 +36,18 @@ public class ToDoController implements ToDoApi {
 
     @Override
     public ResponseEntity<ToDo> createToDo(@RequestBody(required = true)ToDo task){
-        return new ResponseEntity<>(toDoService.createToDo(task), HttpStatus.CREATED);
+        ToDo response = toDoService.createToDo(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Override
     public ResponseEntity<ToDo> updateToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.updateToDo(task, id), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleException(ValidationException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @Override

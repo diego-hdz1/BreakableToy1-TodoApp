@@ -22,8 +22,6 @@ function convertMinutes(minutes: number): string{
 }
 
 const Stats = memo(function({stats}: StatsProps){
-//    export default function Stats({stats}: StatsProps){
-    console.log("Cuantas veces entra");
     return (
         <footer className="stats"> 
             <h3>Average time to finish tasks:</h3>
