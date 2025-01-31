@@ -95,6 +95,9 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     public void validateToDo(ToDo task){
+        if(task == null){
+            throw new ValidationException("To do cannot be null");
+        }
         if(task.getText() == null || task.getText().isEmpty()){
             throw new ValidationException("Name cannot be empty");
         }
