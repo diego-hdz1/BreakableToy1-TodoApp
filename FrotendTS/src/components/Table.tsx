@@ -10,7 +10,7 @@ interface ToDo{
   id: number;
   text: string;
   priority: number;
-  dueDate: string;    //Checar el ? al final de la variable
+  dueDate: string;    
   doneDate: string;
   creationDate: string;
   status: boolean;
@@ -145,7 +145,7 @@ const TableData: React.FC<TableDataProps> = ({
         align: 'center',
   
         sorter: {
-          //Solo para que muestre el mensaje y cambie el cursor en el header
+          //Just to get the "click" message when hovering in the header
         },
         onHeaderCell: () => ({
           onClick: () => handlePriority()
@@ -177,17 +177,6 @@ const TableData: React.FC<TableDataProps> = ({
         }),
       },
       {
-        title: 'Done date',
-        dataIndex: 'doneDate',
-        align: 'center',
-      },
-      ,
-      {
-        title: 'Creation date',
-        dataIndex: 'creationDate',
-        align: 'center',
-      },
-      {
         title: 'Actions',
         dataIndex: 'actions',
         align: 'center',
@@ -196,8 +185,8 @@ const TableData: React.FC<TableDataProps> = ({
           <>
           {record.status === true ? (
           <div>
-            <Button type='primary' onClick={()=> updateToDo(record.id)} style={{marginRight : 8}}>Editar</Button>
-            <Button type='primary' danger onClick={()=> deleteToDo(record.id)} style={{marginRight : 8, backgroundColor: 'red', color : 'white'}}>Eliminar</Button>
+            <Button type='primary' onClick={()=> updateToDo(record.id)} style={{marginRight : 8}}>Edit</Button>
+            <Button type='primary' danger onClick={()=> deleteToDo(record.id)} style={{marginRight : 8, backgroundColor: 'red', color : 'white'}}>Delete</Button>
           </div>) : (<span></span>)}
           </>
         )

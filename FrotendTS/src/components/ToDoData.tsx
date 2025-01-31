@@ -113,7 +113,6 @@ const ToDoData:React.FC<ToDoDataProps> = ({
                     <button className="cancel" onClick={()=>navigator('/')}>Cancel</button>
                 </form>
             </div>
-        // </div>
     );
 }
 export default ToDoData;

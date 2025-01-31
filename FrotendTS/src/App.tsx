@@ -82,7 +82,6 @@ function App(){
               dateSort={dateSort} 
               /> 
 
-              {/* setStats={setStats} */}
               {stats && <Stats stats={stats} />}
               
             </div> }>

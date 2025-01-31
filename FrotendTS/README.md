@@ -1,67 +1,48 @@
-# React + TypeScript + Vite
+# To-Do App Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview 
+This is the frontend of the To-Do App, developed using **React** and **TypeScript**, powered by **Vite** for fast development and build performance. The frontend consumes the backend API and provides a responsive user interface to show all of the information from the backend. 
 
-Currently, two official plugins are available:
+## Features
+- Create, update and delete To-Dos
+- Filter and sort tasks dynamically
+- Responsive UI using Ant Design
+- Client-side routing with React Router DOM
+- API integration using Axios
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies used
+- **Vite:** Fast build tool and development server for React
+- **React:** Library for building the user interface
+- **TypeScript:** Enhances JavaScript with static typing
+- **Ant Desing:** UI component library for a polished and responsive design
+- **Reacr Router DOM:** Handles client-side routing
+- **Axios:** Manages HTTP requests to the backend API
+- **Vitest:** Framework used for unit testing
 
-## Expanding the ESLint configuration
+## Prerequisites
+Before running the project, make sure you have **Node.js** installed.
+This project was developed using Node v22.12.0
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Check if Node.js is installed:
+```bash
+node -v
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+## Running the frontend
+1. Install dependencies:
+```bash
+npm install
 ```
-Tecnologias extras instaladas
+2. Run the application
+```bash
+npm run dev
+```
+3. The frontend will be available at:
+```bash
+http://localhost:8080
+```
 
-- antd
-Libreria de componentes reutilizables en React. Se usa para utilizar y personalizar componentes ya creados en tus proyectos. 
-
-(https://ant.design)
-
-- axios 
-
-Ayuda al manejo de solicitudes http, en este caso, para consumir la API RESTful. Ademas realiza la conversion a JSON de forma automatica
-(https://axios-http.com/es/docs/intro)
-
-- React-router-dom
-
-Es un router creado para React que facilita la navegacion a URL's en donde se puede cargar componentes especificos o navegar a una URL
-
-(https://reactrouter.com)
+## Running the tests
+```bash
+npm run test
+```
