@@ -7,10 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class ToDoRepo implements ToDoRepoInterface{
@@ -53,58 +50,49 @@ public class ToDoRepo implements ToDoRepoInterface{
 
     @Override
     public ToDo updateToDo(ToDo task, Long id) {
-        for(ToDo temp : toDos){
-            if(temp.getId() == id){
-                temp.setDoneDate(task.getDoneDate());
-                temp.setDueDate(task.getDueDate());
-                temp.setText(task.getText());
-                temp.setPriority(task.getPriority());
-                temp.setStatus(task.isStatus());
-                break;
-            }
-        }
-        return task;
+        ToDo existing = findToDoById(id);
+        existing.setDoneDate(task.getDoneDate());
+        existing.setDueDate(task.getDueDate());
+        existing.setText(task.getText());
+        existing.setPriority(task.getPriority());
+        existing.setStatus(task.isStatus());
+        return existing;
     }
 
     @Override
     public ToDo doneToDo(Long id) {
-        for(ToDo temp : toDos){
-            if(temp.getId().equals(id)){
-                temp.setStatus(!temp.isStatus());
-                temp.setDoneDate(LocalDateTime.now());
-                return temp;
-            }
-        }
-        throw new ValidationException("To Do ID not found");
+        ToDo task = findToDoById(id);
+        task.setStatus(true);
+        task.setDoneDate(LocalDateTime.now());
+        return task;
     }
 
     @Override
     public ToDo undoneToDo(Long id) {
-        for(ToDo temp : toDos){
-            if(temp.getId() == id){
-                temp.setStatus(!temp.isStatus());
-                temp.setDoneDate(null);
-                return temp;
-            }
-        }
-        throw new ValidationException("To Do ID not found");
+        ToDo task = findToDoById(id);
+        task.setStatus(false);
+        task.setDoneDate(null);
+        return task;
     }
 
     @Override
     public ToDo getTodo(Long id) {
-        for(ToDo temp : toDos){
-            if(temp.getId() == id){
-                return temp;
-            }
-        }
-        throw new ValidationException("To Do ID not found");
+        return findToDoById(id);
+    }
+
+    @Override
+    public ToDo findToDoById(Long id) {
+        return toDos.stream()
+                .filter(todo -> todo.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ValidationException("ToDo with ID " + id + " not found"));
     }
 
     @Override
     public Boolean deleteToDo(Long id) {
         ToDo removed;
         for(int i=0;i<toDos.size();i++){
-            if(toDos.get(i).getId() == id){
+            if(Objects.equals(toDos.get(i).getId(), id)){
                 removed = toDos.remove(i);
                 return true;
             }

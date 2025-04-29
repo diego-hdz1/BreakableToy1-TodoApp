@@ -13,5 +13,5 @@ public interface ToDoRepoInterface {
     ToDo undoneToDo(Long id);
     ToDo getTodo(Long id);
     Boolean deleteToDo(Long id);
-
+    ToDo findToDoById(Long id);
 }
