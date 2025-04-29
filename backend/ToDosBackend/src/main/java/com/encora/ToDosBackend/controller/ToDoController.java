@@ -45,11 +45,6 @@ public class ToDoController implements ToDoApi {
         return new ResponseEntity<>(toDoService.updateToDo(task, id), HttpStatus.OK);
     }
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handleException(ValidationException exception){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
-
     @Override
     public ResponseEntity<ToDo> doneTask(@PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.doneToDo(id), HttpStatus.OK);

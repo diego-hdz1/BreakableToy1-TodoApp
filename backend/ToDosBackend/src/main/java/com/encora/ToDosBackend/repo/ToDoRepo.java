@@ -1,6 +1,7 @@
 package com.encora.ToDosBackend.repo;
 
 import com.encora.ToDosBackend.model.ToDo;
+import com.encora.ToDosBackend.service.ValidationException;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +75,7 @@ public class ToDoRepo implements ToDoRepoInterface{
                 return temp;
             }
         }
-        return null;
+        throw new ValidationException("To Do ID not found");
     }
 
     @Override
@@ -86,7 +87,7 @@ public class ToDoRepo implements ToDoRepoInterface{
                 return temp;
             }
         }
-        return null;
+        throw new ValidationException("To Do ID not found");
     }
 
     @Override
@@ -96,7 +97,7 @@ public class ToDoRepo implements ToDoRepoInterface{
                 return temp;
             }
         }
-        return null;
+        throw new ValidationException("To Do ID not found");
     }
 
     @Override
@@ -108,6 +109,6 @@ public class ToDoRepo implements ToDoRepoInterface{
                 return true;
             }
         }
-        return false;
+        throw new ValidationException("To Do ID not found");
     }
 }
