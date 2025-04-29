@@ -90,13 +90,7 @@ public class ToDoRepo implements ToDoRepoInterface{
 
     @Override
     public Boolean deleteToDo(Long id) {
-        ToDo removed;
-        for(int i=0;i<toDos.size();i++){
-            if(Objects.equals(toDos.get(i).getId(), id)){
-                removed = toDos.remove(i);
-                return true;
-            }
-        }
-        throw new ValidationException("To Do ID not found");
+        ToDo task = findToDoById(id);
+        return toDos.remove(task);
     }
 }
