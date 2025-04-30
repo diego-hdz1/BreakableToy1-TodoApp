@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-public class ToDoRepo implements ToDoRepoInterface{
+public class ToDoRepository implements ToDoRepositoryInterface {
 
     List<ToDo> toDos = new ArrayList<>(Arrays.asList(
             new ToDo(1L, "First task of the week", null, false, LocalDateTime.of(2025,1,31,22,10), 1, LocalDateTime.of(2025,1,10, 19, 20)),

@@ -2,9 +2,7 @@ package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.model.ToDoStats;
-import com.encora.ToDosBackend.repo.ToDoRepo;
-import com.encora.ToDosBackend.repo.ToDoRepoInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.encora.ToDosBackend.repo.ToDoRepositoryInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -13,9 +11,9 @@ import java.util.List;
 @Service
 public class ToDoStatsService {
 
-    final ToDoRepoInterface toDoRepo;
+    final ToDoRepositoryInterface toDoRepo;
 
-    public ToDoStatsService(ToDoRepoInterface toDoRepo){
+    public ToDoStatsService(ToDoRepositoryInterface toDoRepo){
         this.toDoRepo = toDoRepo;
     }
 

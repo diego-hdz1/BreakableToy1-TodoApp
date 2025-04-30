@@ -2,7 +2,7 @@ package com.encora.ToDosBackend.repository;
 
 import com.encora.ToDosBackend.ToDosBackendApplication;
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.repo.ToDoRepo;
+import com.encora.ToDosBackend.repo.ToDoRepository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 class ToDosRepoTest {
 
     @Autowired
-    private ToDoRepo toDoRepo;
+    private ToDoRepository toDoRepo;
 
     @BeforeEach
     void setup(){
-        toDoRepo = new ToDoRepo();
+        toDoRepo = new ToDoRepository();
     }
 
     @Test
@@ -65,11 +65,11 @@ class ToDosRepoTest {
     public void TestUpdateToDo(){
         Long id = toDoRepo.generateId();
         ToDo originalToDo = toDoRepo.getTodo(id-1);
+        String originalText = originalToDo.getText();
         ToDo updatedToDo = originalToDo.deepCopy();
         updatedToDo.setText("Something else");
-
         updatedToDo = toDoRepo.updateToDo(updatedToDo, updatedToDo.getId());
-        assertNotEquals(originalToDo, updatedToDo);
+        assertNotEquals(originalText, updatedToDo.getText());
     }
 
     @Test

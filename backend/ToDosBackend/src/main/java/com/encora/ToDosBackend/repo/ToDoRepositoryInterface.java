@@ -4,7 +4,7 @@ import com.encora.ToDosBackend.model.ToDo;
 
 import java.util.List;
 
-public interface ToDoRepoInterface {
+public interface ToDoRepositoryInterface {
     List<ToDo> getTodos();
     ToDo createToDo(ToDo task);
     Long generateId();

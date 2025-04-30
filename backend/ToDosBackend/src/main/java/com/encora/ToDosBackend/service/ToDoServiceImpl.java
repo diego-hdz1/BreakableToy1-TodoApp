@@ -1,7 +1,7 @@
 package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.repo.ToDoRepoInterface;
+import com.encora.ToDosBackend.repo.ToDoRepositoryInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class ToDoServiceImpl implements ToDoService {
 
-    final ToDoRepoInterface toDoRepo;
+    final ToDoRepositoryInterface toDoRepo;
 
-    public ToDoServiceImpl(ToDoRepoInterface toDoRepo){
+    public ToDoServiceImpl(ToDoRepositoryInterface toDoRepo){
         this.toDoRepo = toDoRepo;
     }
 
@@ -79,7 +79,7 @@ public class ToDoServiceImpl implements ToDoService {
                     (orderDate == 2 ? Comparator.nullsFirst(LocalDate::compareTo) : Comparator.nullsLast(LocalDate::compareTo))
             );
             if (orderDate == 2) {
-                dateComparator = dateComparator.reversed(); // for descending order
+                dateComparator = dateComparator.reversed();
             }
             comparator = (comparator == null) ? dateComparator : comparator.thenComparing(dateComparator);
         }
@@ -103,7 +103,7 @@ public class ToDoServiceImpl implements ToDoService {
         if(task == null){
             throw new ValidationException("To do cannot be null");
         }
-        if(task.getText() == null || task.getText().isEmpty()){
+        if(task.getText() == null || task.getText().trim().isEmpty()){
             throw new ValidationException("Name cannot be empty");
         }
         if(task.getPriority() == null){
@@ -137,6 +137,7 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public ToDo doneToDo(Long id) {
-        return toDoRepo.doneToDo(id);
+        ToDo a = toDoRepo.doneToDo(id);
+        return a;
     }
 }
