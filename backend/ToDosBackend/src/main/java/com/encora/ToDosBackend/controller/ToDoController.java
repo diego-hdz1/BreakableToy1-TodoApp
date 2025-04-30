@@ -1,6 +1,7 @@
 package com.encora.ToDosBackend.controller;
 
 import com.encora.ToDosBackend.model.ToDo;
+import com.encora.ToDosBackend.service.ToDoService;
 import com.encora.ToDosBackend.service.ToDoServiceImpl;
 import com.encora.ToDosBackend.service.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8080")
 public class ToDoController implements ToDoApi {
 
-    @Autowired
-    ToDoServiceImpl toDoService;
+    final ToDoServiceImpl toDoService;
+
+    public ToDoController(ToDoServiceImpl toDoService){
+        this.toDoService = toDoService;
+    }
 
     @Override
     public ResponseEntity<List<ToDo>> getTodos(

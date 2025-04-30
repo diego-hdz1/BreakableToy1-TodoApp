@@ -2,7 +2,7 @@ package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.repo.ToDoRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.encora.ToDosBackend.repo.ToDoRepoInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,8 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class ToDoServiceImpl implements ToDoService {
 
-    @Autowired
-    ToDoRepo toDoRepo;
+    final ToDoRepoInterface toDoRepo;
+
+    public ToDoServiceImpl(ToDoRepoInterface toDoRepo){
+        this.toDoRepo = toDoRepo;
+    }
 
     @Override
     public List<ToDo> getTodos(String nameFilter, Integer priorityFilter, String filterDone, Integer pagination, Integer orderPriority, Integer orderDate) {
