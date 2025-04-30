@@ -1,7 +1,6 @@
 package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.repo.ToDoRepo;
 import com.encora.ToDosBackend.repo.ToDoRepoInterface;
 import org.springframework.stereotype.Service;
 

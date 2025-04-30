@@ -4,7 +4,6 @@ import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.service.ValidationException;
 import org.springframework.stereotype.Repository;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;

@@ -2,9 +2,6 @@ package com.encora.ToDosBackend.controller;
 
 import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.service.ToDoService;
-import com.encora.ToDosBackend.service.ToDoServiceImpl;
-import com.encora.ToDosBackend.service.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +12,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8080")
 public class ToDoController implements ToDoApi {
 
-    final ToDoServiceImpl toDoService;
+    final ToDoService toDoService;
 
-    public ToDoController(ToDoServiceImpl toDoService){
+    public ToDoController(ToDoService toDoService){
         this.toDoService = toDoService;
     }
 
