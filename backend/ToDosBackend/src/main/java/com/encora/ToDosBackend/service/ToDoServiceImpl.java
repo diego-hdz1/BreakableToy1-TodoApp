@@ -61,26 +61,29 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
-    public List<ToDo> orderTodos(List<ToDo> todos, Integer orderPriority , Integer orderDate){
-        if(orderPriority == 1 && orderDate == 1) return todos;
+    public List<ToDo> orderTodos(List<ToDo> todos, Integer orderPriority, Integer orderDate) {
+        if (orderPriority == 1 && orderDate == 1) return todos;
+        Comparator<ToDo> comparator = null;
 
-        if(orderPriority == 3 && orderDate ==1) {todos.sort(Comparator.comparingInt(ToDo::getPriority));}
-        else if(orderPriority ==2 && orderDate == 1) {todos.sort(Comparator.comparingInt(ToDo::getPriority).reversed());}
-        else if(orderPriority == 1 && orderDate == 3) {todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));}
-        else if(orderPriority ==1 && orderDate ==2) {todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());}
-        else if(orderPriority == 2 && orderDate == 2){
-            todos.sort(Comparator.comparing(ToDo::getPriority).reversed()
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));
-        }else if(orderPriority == 2 && orderDate == 3){
-            todos.sort(Comparator.comparing(ToDo::getPriority)
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());
-        }else if(orderPriority == 3 && orderDate ==2){
-            todos.sort(Comparator.comparing(ToDo::getPriority).reversed()
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)));
-        }else if(orderPriority == 3 && orderDate == 3){
-            todos.sort(Comparator.comparingInt(ToDo::getPriority)
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo).reversed()));
+        if (orderPriority != 1) {
+            Comparator<ToDo> priorityComparator = Comparator.comparingInt(ToDo::getPriority);
+            if (orderPriority == 2) {
+                priorityComparator = priorityComparator.reversed();
+            }
+            comparator = priorityComparator;
         }
+
+        if (orderDate != 1) {
+            Comparator<ToDo> dateComparator = Comparator.comparing(
+                    ToDo::getDueDate,
+                    (orderDate == 2 ? Comparator.nullsFirst(LocalDate::compareTo) : Comparator.nullsLast(LocalDate::compareTo))
+            );
+            if (orderDate == 2) {
+                dateComparator = dateComparator.reversed(); // for descending order
+            }
+            comparator = (comparator == null) ? dateComparator : comparator.thenComparing(dateComparator);
+        }
+        todos.sort(comparator);
         return todos;
     }
 
@@ -116,7 +119,6 @@ public class ToDoServiceImpl implements ToDoService {
             }
         }
     }
-
 
     @Override
     public ToDo undoneToDo(Long id) {
