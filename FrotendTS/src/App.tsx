@@ -5,7 +5,6 @@ import PaginationControll from "./components/Pagination";
 import Stats from "./components/Stats";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ToDoData from "./components/ToDoData";
 import {useEffect, useState } from "react";
 import axios from "axios";
 
@@ -62,6 +61,7 @@ function App(){
               setData = {setData}
               ordenation={ordenation} 
               dateSort = {dateSort} 
+              fetchStats = {fetchStats}
               /> 
               
               <TableData data={data} setData={setData} 
@@ -87,8 +87,6 @@ function App(){
             </div> }>
             
             </Route>
-            <Route path='/add-todo' element={ <ToDoData fetchStats = {fetchStats}/> }></Route>
-            <Route path='/edit-todo/:id' element={ <ToDoData fetchStats = {fetchStats} /> }></Route>
           </Routes>
       </BrowserRouter>
     </div>

@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {PORT} from '../constants';
+import ModalComponent from "./Modal";
+import { useState } from "react";
+
 
 interface FilterProps{
     nameFilter: string;
@@ -13,6 +16,7 @@ interface FilterProps{
     setData: (data:any) => void;
     ordenation: number;
     dateSort: number;
+    fetchStats: () => void;
 }
 
 const Filter: React.FC<FilterProps> = ({
@@ -25,14 +29,28 @@ const Filter: React.FC<FilterProps> = ({
   handleFilterDone,
   setData,
   ordenation,
-  dateSort
+  dateSort,
+  fetchStats
 }) => {
     const navigator = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     function addNewToDo(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();    
-        navigator('/add-todo');
+        setIsModalOpen(true);
     }
+
+    // DYNAMIC LOADING WILL BE ADDED LATER
+    //   useEffect(()=>{
+    //     if(query.length < 3){
+    //       setOptions([]);
+    //       return;
+    //     }
+    //     const debounce = setTimeout(()=>{
+    //       fetchAirports(query);
+    //     }, 500);
+    //     return () => clearTimeout(debounce);
+    //   }, [query]);
 
     function handleFilter(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
@@ -65,6 +83,7 @@ const Filter: React.FC<FilterProps> = ({
             <form className="add-form">
             <button onClick={addNewToDo}>Add To Do</button>
             </form>
+            <ModalComponent isModalOpen = {isModalOpen} fetchStats={fetchStats} setIsModalOpen={setIsModalOpen}/>
         </div>
     );
 
