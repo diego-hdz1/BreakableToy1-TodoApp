@@ -8,7 +8,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {useEffect, useState } from "react";
 import axios from "axios";
 
-
 interface StatsData {
   averageTotalTime: number;
   averageLowTime: number;
@@ -16,7 +15,6 @@ interface StatsData {
   averageHighTime: number;
   numberPages: number;
 }
-
 
 function App(){
 

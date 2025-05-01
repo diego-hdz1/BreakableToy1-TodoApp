@@ -1,23 +1,29 @@
+import React, { useEffect } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input, DatePicker, Select, Card, Space, Modal } from 'antd';
 import dayjs from 'dayjs';
 import {PORT} from '../constants';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 interface ModalProps{
     isModalOpen: boolean;
+    currentId: number;
     fetchStats: () => void;
     setIsModalOpen: (data: boolean) => void;
     
 }
 
 const ModalComponent: React.FC<ModalProps> = ({
+    currentId,
     isModalOpen,
     fetchStats,
     setIsModalOpen
 }) => {
   const today = dayjs();
   const dateFormat = 'YYYY-MM-DD';
+  const [form] = Form.useForm();
+  const navigator = useNavigate();
 
   type FieldType = {
     toDoName: string;
@@ -28,6 +34,7 @@ const ModalComponent: React.FC<ModalProps> = ({
 
   
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    console.log(currentId);
 
     const noDueDate = values.noToDoDate;
     let dueDateFinal = "";
@@ -37,28 +44,51 @@ const ModalComponent: React.FC<ModalProps> = ({
     const toDoPriority = values.priority.value;
     const nowDate = new Date();
     let localDate = new Date(nowDate.getTime()-(nowDate.getTimezoneOffset() * 60000));
-    const newToDo = {id: -1 ,text: values.toDoName, dueDate: dueDateFinal, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
 
-    //TO DO: Put a message that it was added correctly (Or there was an error)
-    axios.post(`http://localhost:${PORT}/todos`, newToDo).then((response) => { 
-        fetchStats();
-        setIsModalOpen(false);
-    });
-    
+    if(currentId != -1){
+        console.log("En el update");
+        const newToDo = {id: currentId ,text: values.toDoName, dueDate: dueDateFinal, status: true, doneDate: null, priority: toDoPriority};
+        axios.put(`http://localhost:${PORT}/todos/${currentId}`, newToDo).then((response) => { 
+            fetchStats();
+            setIsModalOpen(false);
+            navigator('/');
+        });
+    }else{
+        console.log("En el add");
+        const newToDo = {id: -1 ,text: values.toDoName, dueDate: dueDateFinal, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
+        console.log(newToDo);
+        //TO DO: Put a message that it was added correctly (Or there was an error)
+        axios.post(`http://localhost:${PORT}/todos`, newToDo).then((response) => { 
+            fetchStats();
+            setIsModalOpen(false);
+            navigator('/');
+        });
+    }
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
+  };  
   
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
-//   const handleDateChange = (date:any, dateString:any) =>{
-//     setCurrentDate(dayjs(dayjs(dateString).format(dateFormat)));
-//     console.log(date);
-//   }
+    useEffect(()=>{
+        if(currentId != -1){
+            axios.get(`http://localhost:${PORT}/todos/${currentId}`).then((response)=>{
+                console.log(response.data);
+                const labelFinal = response.data.priority === 1 ? 'Low' : response.data.priority === 2 ? 'Medium' : response.data.priority === 3 ? 'High' : '';
+                const valueFinal = parseInt(response.data.priority);
+                const initialValues = {
+                    toDoName: response.data.text,
+                    toDoDate: dayjs(response.data.dueDate),
+                    priority: {value: valueFinal, label: labelFinal}
+                  };
+                form.setFieldsValue(initialValues);
+            }).catch(error =>{console.log(error);})
+        }
+    }, [currentId])
 
   return(
     <div>
@@ -66,6 +96,7 @@ const ModalComponent: React.FC<ModalProps> = ({
         <Space direction="vertical" size={16}>
         <Card title="Change this" className='show-card'>
         <Form
+          form={form}
           name="basic"
           labelCol={{ span: 10 }}
           wrapperCol={{ span: 30 }}

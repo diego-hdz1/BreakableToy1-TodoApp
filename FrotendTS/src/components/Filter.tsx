@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {PORT} from '../constants';
 import ModalComponent from "./Modal";
@@ -32,8 +31,8 @@ const Filter: React.FC<FilterProps> = ({
   dateSort,
   fetchStats
 }) => {
-    const navigator = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const NO_ID_NEEDED = -1;
 
     function addNewToDo(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();    
@@ -83,7 +82,7 @@ const Filter: React.FC<FilterProps> = ({
             <form className="add-form">
             <button onClick={addNewToDo}>Add To Do</button>
             </form>
-            <ModalComponent isModalOpen = {isModalOpen} fetchStats={fetchStats} setIsModalOpen={setIsModalOpen}/>
+            <ModalComponent currentId = {NO_ID_NEEDED} isModalOpen = {isModalOpen} fetchStats={fetchStats} setIsModalOpen={setIsModalOpen}/>
         </div>
     );
 
