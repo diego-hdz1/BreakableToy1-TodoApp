@@ -93,7 +93,6 @@ const TableData: React.FC<TableDataProps> = ({
     const updateToDo = (toDoId:number)=>{
       setCurrentId(toDoId);
       setIsModalOpen(true);
-      //navigator(`/edit-todo/${toDoId}`);
     }
   
     const deleteToDo = (toDoId:number)=>{
