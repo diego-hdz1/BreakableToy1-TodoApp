@@ -31,13 +31,17 @@ public class ToDoServiceImpl implements ToDoService {
     @Override
     public List<ToDo> filterTodos(List<ToDo> todos, String nameFilter, Integer priorityFilter, String filterDone) {
         if(nameFilter == null && priorityFilter == null && filterDone == null) return todos;
+
+        // Determine filter value for completion status
         Boolean checkFilter;
         if(Objects.equals(filterDone, "Done")) checkFilter = false;
         else if(Objects.equals(filterDone, "Undone")) checkFilter = true;
         else {
             checkFilter = null;
         }
-         List<ToDo> filteredToDos = todos.stream()
+
+        // Apply filters based on non-null values
+        List<ToDo> filteredToDos = todos.stream()
                 .filter(todo -> nameFilter == null || todo.getText().toLowerCase().contains(nameFilter.toLowerCase()))
                 .filter(todo -> priorityFilter == null || priorityFilter != 0 ? Objects.equals(todo.getPriority(), priorityFilter) : Objects.equals(todo.getPriority(), todo.getPriority()))
                  .filter(todo -> checkFilter == null || todo.isStatus().equals(checkFilter))
@@ -49,13 +53,14 @@ public class ToDoServiceImpl implements ToDoService {
     public List<ToDo> paginateTodos(List<ToDo> todos, Integer pagination, Integer pageSize){
         int totalTodos = todos.size();
         if (totalTodos < 10) return todos;
+
+        // Calculate bounds based on pagination index and page size
         int lowerBound = pagination*pageSize;
         int upperBound = (pagination+1)*pageSize;
 
         if(totalTodos < upperBound){
             upperBound = totalTodos;
         }
-
         todos = todos.subList(lowerBound, upperBound);
         return todos;
     }
@@ -99,7 +104,7 @@ public class ToDoServiceImpl implements ToDoService {
         return toDoRepo.updateToDo(task, id);
     }
 
-    public void validateToDo(ToDo task){    //Validate that the types are the ones that are expected
+    public void validateToDo(ToDo task){
         if(task == null){
             throw new ValidationException("To do cannot be null");
         }
@@ -112,6 +117,8 @@ public class ToDoServiceImpl implements ToDoService {
         if(task.isStatus() == null){
             throw new ValidationException("Status cannot be empty");
         }
+
+        // Check that due date is not in the past
         if(task.getDueDate() != null){
             LocalDate currentDate = LocalDate.now();
             if(currentDate.isAfter(task.getDueDate())){
