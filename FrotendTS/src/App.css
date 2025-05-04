@@ -185,3 +185,16 @@ button:hover, select:hover{
 .form .cancel:hover{
   background: #dc3545;
 }
+
+.show-card {
+  background-color: #b4cad8;
+  transition: transform 0.2s;
+  padding: 26px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 8px;
+}

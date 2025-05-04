@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input, DatePicker, Select, Card, Space, Modal } from 'antd';
+import { Button, Checkbox, Form, Input, DatePicker, Select, Card, notification, Modal } from 'antd';
+import type { NotificationArgsProps } from 'antd';
 import dayjs from 'dayjs';
 import {PORT} from '../constants';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+
+type NotificationPlacement = NotificationArgsProps['placement'];
 
 interface ModalProps{
     isModalOpen: boolean;
@@ -25,16 +28,32 @@ const ModalComponent: React.FC<ModalProps> = ({
   const [form] = Form.useForm();
   const navigator = useNavigate();
 
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (placement: NotificationPlacement) => {
+    api.success({
+        message: 'To-Do Saved Successfully',
+        description: 'Your to-do item has been saved.',
+        placement,
+      });      
+  };
+
+  const handleSuccessLogic = () => {
+    fetchStats();
+    form.resetFields();
+    setIsModalOpen(false);
+    openNotification('bottomRight')
+    navigator('/');     
+  };
+
   type FieldType = {
     toDoName: string;
     toDoDate: string;
     priority: any;
     noToDoDate: any;
   };
-
   
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log(currentId);
 
     const noDueDate = values.noToDoDate;
     let dueDateFinal = "";
@@ -46,22 +65,14 @@ const ModalComponent: React.FC<ModalProps> = ({
     let localDate = new Date(nowDate.getTime()-(nowDate.getTimezoneOffset() * 60000));
 
     if(currentId != -1){
-        console.log("En el update");
         const newToDo = {id: currentId ,text: values.toDoName, dueDate: dueDateFinal, status: true, doneDate: null, priority: toDoPriority};
         axios.put(`http://localhost:${PORT}/todos/${currentId}`, newToDo).then((response) => { 
-            fetchStats();
-            setIsModalOpen(false);
-            navigator('/');
+            handleSuccessLogic();
         });
     }else{
-        console.log("En el add");
         const newToDo = {id: -1 ,text: values.toDoName, dueDate: dueDateFinal, status: true, doneDate: null, priority: toDoPriority, creationDate : localDate.toJSON()};
-        console.log(newToDo);
-        //TO DO: Put a message that it was added correctly (Or there was an error)
         axios.post(`http://localhost:${PORT}/todos`, newToDo).then((response) => { 
-            fetchStats();
-            setIsModalOpen(false);
-            navigator('/');
+            handleSuccessLogic();
         });
     }
   };
@@ -92,15 +103,12 @@ const ModalComponent: React.FC<ModalProps> = ({
 
   return(
     <div>
-        <Modal title="To Dos App" open={isModalOpen} onCancel={handleCancel} className="modal">
-        <Space direction="vertical" size={16}>
-        <Card title="Change this" className='show-card'>
+        {contextHolder}
+        <Modal title="To Dos App" open={isModalOpen} onCancel={handleCancel} width={"50em"}>
+        <Card title="Enter de information for the To" className='show-card'>
         <Form
           form={form}
           name="basic"
-          labelCol={{ span: 10 }}
-          wrapperCol={{ span: 30 }}
-          style={{ maxWidth: 800 }}
           initialValues={{ remember: true, nonStop: false }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -124,7 +132,7 @@ const ModalComponent: React.FC<ModalProps> = ({
           </Form.Item>
 
           <Form.Item name="noToDoDate" valuePropName="checked">
-            <Checkbox>Do not use a to do date</Checkbox>
+            <Checkbox onClick={()=>{form.setFieldsValue({toDoDate: null})}}>Do not use a to do date</Checkbox>
           </Form.Item>
 
           <Form.Item label="Priority: " name={"priority"} rules={[{ required: true, message: 'Please select a priority' }]}    >
@@ -150,15 +158,15 @@ const ModalComponent: React.FC<ModalProps> = ({
           </Form.Item>
 
           <Form.Item label={null}>
-            <Button type="primary" htmlType="submit" className='return-button'>
+            <Button type="primary" htmlType="submit" >
               Submit
             </Button>
           </Form.Item>
 
         </Form>
         </Card>
-        </Space>
         </Modal>   
+        
     </div>
   );
 }
