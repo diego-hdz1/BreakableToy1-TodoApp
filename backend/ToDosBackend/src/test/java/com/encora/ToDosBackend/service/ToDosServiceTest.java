@@ -2,6 +2,7 @@ package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.repo.ToDoRepository;
+import com.encora.ToDosBackend.repo.ToDoRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,14 +20,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
 public class ToDosServiceTest {
 
     @Mock
-    private ToDoRepository toDoRepo;
-
-//    @Mock
-//    private ToDoStatsService toDoStatsService;
+    private ToDoRepositoryInterface toDoRepo;
 
     @InjectMocks
     private ToDoServiceImpl toDoService;
@@ -189,13 +186,6 @@ public class ToDosServiceTest {
         Boolean result = toDoService.deleteToDo(1L);
         assertEquals(true, result);
     }
-
-//    @Test
-//    void testStatsService(){
-//        when(toDoRepo.getTodos()).thenReturn(mockTodos);
-//        ToDoStats finalStats  = toDoStatsService.getStats();
-//        assertNotNull(finalStats);
-//    }
 
     @Test
     void testValidationException(){

@@ -99,7 +99,7 @@ public class ToDoServiceImpl implements ToDoService {
         return toDoRepo.updateToDo(task, id);
     }
 
-    public void validateToDo(ToDo task){
+    public void validateToDo(ToDo task){    //Validate that the types are the ones that are expected
         if(task == null){
             throw new ValidationException("To do cannot be null");
         }
