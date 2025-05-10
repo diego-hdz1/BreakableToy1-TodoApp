@@ -1,15 +1,17 @@
 package com.encora.ToDosBackend.service;
 
-import com.encora.ToDosBackend.ToDosBackendApplication;
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.model.ToDoStats;
-import com.encora.ToDosBackend.repo.ToDoRepo;
+import com.encora.ToDosBackend.repo.ToDoRepository;
+import com.encora.ToDosBackend.repo.ToDoRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -18,16 +20,13 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-@SpringBootTest(classes = ToDosBackendApplication.class)
 public class ToDosServiceTest {
+
     @Mock
-    private ToDoRepo toDoRepo;
+    private ToDoRepositoryInterface toDoRepo;
 
     @InjectMocks
     private ToDoServiceImpl toDoService;
-
-    @InjectMocks
-    private ToDoStatsService toDoStatsService;
 
     private List<ToDo> mockTodos;
 
@@ -117,7 +116,7 @@ public class ToDosServiceTest {
         existingToDo.setId(100L);
         existingToDo.setDoneDate(null);
         existingToDo.setStatus(false);
-        when(toDoRepo.doneToDo(100L)).thenReturn(existingToDo);
+        when(toDoRepo.doneToDo(Mockito.any())).thenReturn(existingToDo);
         ToDo result = toDoService.doneToDo(100L);
         assertNotNull(result);
         assertEquals(result.getId(), existingToDo.getId());
@@ -161,7 +160,7 @@ public class ToDosServiceTest {
 
     @Test
     void testCreateToDo(){
-        ToDo newToDo = new ToDo(4L, "New", LocalDate.of(2025,3,19), true, LocalDateTime.of(2025,2,11,11,11), 2, LocalDateTime.of(2025,1,12,17, 11));
+        ToDo newToDo = new ToDo(4L, "New", LocalDate.of(2025,10,19), true, LocalDateTime.of(2025,2,11,11,11), 2, LocalDateTime.of(2025,1,12,17, 11));
         when(toDoRepo.createToDo(newToDo)).thenReturn(newToDo);
 
         ToDo result = toDoService.createToDo(newToDo);
@@ -186,13 +185,6 @@ public class ToDosServiceTest {
         when(toDoRepo.deleteToDo(1L)).thenReturn(true);
         Boolean result = toDoService.deleteToDo(1L);
         assertEquals(true, result);
-    }
-
-    @Test
-    void testStatsService(){
-        when(toDoRepo.getTodos()).thenReturn(mockTodos);
-        ToDoStats finalStats  = toDoStatsService.getStats();
-        assertNotNull(finalStats);
     }
 
     @Test

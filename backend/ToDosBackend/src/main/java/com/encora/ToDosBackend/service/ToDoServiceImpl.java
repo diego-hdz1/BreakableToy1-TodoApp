@@ -1,8 +1,7 @@
 package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.repo.ToDoRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.encora.ToDosBackend.repo.ToDoRepositoryInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,8 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class ToDoServiceImpl implements ToDoService {
 
-    @Autowired
-    ToDoRepo toDoRepo;
+    final ToDoRepositoryInterface toDoRepo;
+
+    public ToDoServiceImpl(ToDoRepositoryInterface toDoRepo){
+        this.toDoRepo = toDoRepo;
+    }
 
     @Override
     public List<ToDo> getTodos(String nameFilter, Integer priorityFilter, String filterDone, Integer pagination, Integer orderPriority, Integer orderDate) {
@@ -29,13 +31,17 @@ public class ToDoServiceImpl implements ToDoService {
     @Override
     public List<ToDo> filterTodos(List<ToDo> todos, String nameFilter, Integer priorityFilter, String filterDone) {
         if(nameFilter == null && priorityFilter == null && filterDone == null) return todos;
+
+        // Determine filter value for completion status
         Boolean checkFilter;
         if(Objects.equals(filterDone, "Done")) checkFilter = false;
         else if(Objects.equals(filterDone, "Undone")) checkFilter = true;
         else {
             checkFilter = null;
         }
-         List<ToDo> filteredToDos = todos.stream()
+
+        // Apply filters based on non-null values
+        List<ToDo> filteredToDos = todos.stream()
                 .filter(todo -> nameFilter == null || todo.getText().toLowerCase().contains(nameFilter.toLowerCase()))
                 .filter(todo -> priorityFilter == null || priorityFilter != 0 ? Objects.equals(todo.getPriority(), priorityFilter) : Objects.equals(todo.getPriority(), todo.getPriority()))
                  .filter(todo -> checkFilter == null || todo.isStatus().equals(checkFilter))
@@ -47,38 +53,42 @@ public class ToDoServiceImpl implements ToDoService {
     public List<ToDo> paginateTodos(List<ToDo> todos, Integer pagination, Integer pageSize){
         int totalTodos = todos.size();
         if (totalTodos < 10) return todos;
+
+        // Calculate bounds based on pagination index and page size
         int lowerBound = pagination*pageSize;
         int upperBound = (pagination+1)*pageSize;
 
         if(totalTodos < upperBound){
             upperBound = totalTodos;
         }
-
         todos = todos.subList(lowerBound, upperBound);
         return todos;
     }
 
     @Override
-    public List<ToDo> orderTodos(List<ToDo> todos, Integer orderPriority , Integer orderDate){
-        if(orderPriority == 1 && orderDate == 1) return todos;
+    public List<ToDo> orderTodos(List<ToDo> todos, Integer orderPriority, Integer orderDate) {
+        if (orderPriority == 1 && orderDate == 1) return todos;
+        Comparator<ToDo> comparator = null;
 
-        if(orderPriority == 3 && orderDate ==1) {todos.sort(Comparator.comparingInt(ToDo::getPriority));}
-        else if(orderPriority ==2 && orderDate == 1) {todos.sort(Comparator.comparingInt(ToDo::getPriority).reversed());}
-        else if(orderPriority == 1 && orderDate == 3) {todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));}
-        else if(orderPriority ==1 && orderDate ==2) {todos.sort(Comparator.comparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());}
-        else if(orderPriority == 2 && orderDate == 2){
-            todos.sort(Comparator.comparing(ToDo::getPriority).reversed()
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo)));
-        }else if(orderPriority == 2 && orderDate == 3){
-            todos.sort(Comparator.comparing(ToDo::getPriority)
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)).reversed());
-        }else if(orderPriority == 3 && orderDate ==2){
-            todos.sort(Comparator.comparing(ToDo::getPriority).reversed()
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsFirst(LocalDate::compareTo)));
-        }else if(orderPriority == 3 && orderDate == 3){
-            todos.sort(Comparator.comparingInt(ToDo::getPriority)
-                    .thenComparing(ToDo::getDueDate, Comparator.nullsLast(LocalDate::compareTo).reversed()));
+        if (orderPriority != 1) {
+            Comparator<ToDo> priorityComparator = Comparator.comparingInt(ToDo::getPriority);
+            if (orderPriority == 2) {
+                priorityComparator = priorityComparator.reversed();
+            }
+            comparator = priorityComparator;
         }
+
+        if (orderDate != 1) {
+            Comparator<ToDo> dateComparator = Comparator.comparing(
+                    ToDo::getDueDate,
+                    (orderDate == 2 ? Comparator.nullsFirst(LocalDate::compareTo) : Comparator.nullsLast(LocalDate::compareTo))
+            );
+            if (orderDate == 2) {
+                dateComparator = dateComparator.reversed();
+            }
+            comparator = (comparator == null) ? dateComparator : comparator.thenComparing(dateComparator);
+        }
+        todos.sort(comparator);
         return todos;
     }
 
@@ -98,7 +108,7 @@ public class ToDoServiceImpl implements ToDoService {
         if(task == null){
             throw new ValidationException("To do cannot be null");
         }
-        if(task.getText() == null || task.getText().isEmpty()){
+        if(task.getText() == null || task.getText().trim().isEmpty()){
             throw new ValidationException("Name cannot be empty");
         }
         if(task.getPriority() == null){
@@ -107,6 +117,8 @@ public class ToDoServiceImpl implements ToDoService {
         if(task.isStatus() == null){
             throw new ValidationException("Status cannot be empty");
         }
+
+        // Check that due date is not in the past
         if(task.getDueDate() != null){
             LocalDate currentDate = LocalDate.now();
             if(currentDate.isAfter(task.getDueDate())){
@@ -114,7 +126,6 @@ public class ToDoServiceImpl implements ToDoService {
             }
         }
     }
-
 
     @Override
     public ToDo undoneToDo(Long id) {
@@ -133,6 +144,7 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public ToDo doneToDo(Long id) {
-        return toDoRepo.doneToDo(id);
+        ToDo a = toDoRepo.doneToDo(id);
+        return a;
     }
 }

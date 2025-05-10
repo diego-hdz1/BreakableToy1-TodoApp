@@ -2,8 +2,7 @@ package com.encora.ToDosBackend.service;
 
 import com.encora.ToDosBackend.model.ToDo;
 import com.encora.ToDosBackend.model.ToDoStats;
-import com.encora.ToDosBackend.repo.ToDoRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.encora.ToDosBackend.repo.ToDoRepositoryInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -12,40 +11,46 @@ import java.util.List;
 @Service
 public class ToDoStatsService {
 
-    @Autowired
-    ToDoRepo toDoRepo;
+    final ToDoRepositoryInterface toDoRepo;
+
+    public ToDoStatsService(ToDoRepositoryInterface toDoRepo){
+        this.toDoRepo = toDoRepo;
+    }
 
     public ToDoStats getStats() {
         List<ToDo> todos = toDoRepo.getTodos();
-        ToDoStats finalStats = new ToDoStats(0L,0L,0L,0L, todos.size()/10);
-        int count = 0, avgLow = 0, avgMedium = 0, avgHigh=0;
-        for(ToDo todo : todos){
-            if(todo.getDoneDate() == null) continue;
-            Duration duration = Duration.between(todo.getCreationDate(),todo.getDoneDate());
-            Long finalMinutes =  duration.toMinutes();
-            finalStats.setAverageTotalTime(finalStats.getAverageTotalTime() + finalMinutes);
-            if(todo.getPriority() == 1){
-                finalStats.setAverageLowTime(finalStats.getAverageLowTime() + finalMinutes);
-                avgLow = avgLow + 1;
+
+        long totalTime = 0L;
+        long lowTime = 0L, mediumTime = 0L, highTime = 0L;
+        int totalCount = 0, lowCount = 0, mediumCount = 0, highCount = 0;
+
+        for (ToDo todo : todos) {
+            if (todo.getDoneDate() == null) continue;
+
+            long minutes = Duration.between(todo.getCreationDate(), todo.getDoneDate()).toMinutes();
+            totalTime += minutes;
+            totalCount++;
+
+            switch (todo.getPriority()) {
+                case 1 -> {
+                    lowTime += minutes;
+                    lowCount++;
+                }
+                case 2 -> {
+                    mediumTime += minutes;
+                    mediumCount++;
+                }
+                case 3 -> {
+                    highTime += minutes;
+                    highCount++;
+                }
             }
-            else if(todo.getPriority() == 2) {
-                finalStats.setAverageMediumTime(finalStats.getAverageMediumTime() + finalMinutes);
-                avgMedium = avgMedium + 1;
-            }
-            else if(todo.getPriority() == 3) {
-                finalStats.setAverageHighTime(finalStats.getAverageHighTime() + finalMinutes);
-                avgHigh = avgHigh + 1;
-            }
-            count = count + 1;
         }
-        if(count==0) count = 1;
-        if(avgLow==0) avgLow = 1;
-        if(avgMedium==0) avgMedium = 1;
-        if(avgHigh==0) avgHigh = 1;
-        finalStats.setAverageTotalTime(finalStats.getAverageTotalTime()/count);
-        finalStats.setAverageLowTime(finalStats.getAverageLowTime()/avgLow);
-        finalStats.setAverageMediumTime(finalStats.getAverageMediumTime()/avgMedium);
-        finalStats.setAverageHighTime(finalStats.getAverageHighTime()/avgHigh);
-        return finalStats;
+
+        long avgTotal = totalCount > 0 ? totalTime / totalCount : 0;
+        long avgLow = lowCount > 0 ? lowTime / lowCount : 0;
+        long avgMedium = mediumCount > 0 ? mediumTime / mediumCount : 0;
+        long avgHigh = highCount > 0 ? highTime / highCount : 0;
+        return new ToDoStats(avgTotal, avgLow, avgMedium, avgHigh, todos.size() / 10);
     }
 }

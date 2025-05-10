@@ -75,7 +75,7 @@ public class ToDoControllerTest {
 
     @Test
     public void TestGetAllToDosEndpoint() throws Exception{
-        List<ToDo> ToDosResult = Arrays.asList();
+        List<ToDo> ToDosResult = List.of();
         when(toDoService.getTodos("tarea", 1,"All",1, 1,1))
                 .thenReturn(ToDosResult);
 
@@ -129,33 +129,37 @@ public class ToDoControllerTest {
     }
 
     @Test
-    public void TestUndoneToDoEndpoint() throws Exception{
+    public void TestUndoneToDoEndpoint() throws Exception {
         when(toDoService.undoneToDo(1L)).thenAnswer(invocation -> {
             newTodo.setStatus(false);
             newTodo.setDoneDate(null);
             return newTodo;
         });
 
-        ResponseEntity<ToDo> result = toDoController.undoneTask(1L);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertNotNull(result.getBody());
-        assertFalse(result.getBody().isStatus());
-        assertNull(result.getBody().getDoneDate());
+        ResultActions result = mockMvc.perform(put("/todos/1/undone")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.doneDate").doesNotExist());
     }
 
     @Test
-    public void TestDoneToDoEndpoint() throws Exception{
+    public void TestDoneToDoEndpoint() throws Exception {
+        LocalDateTime expectedDate = LocalDateTime.of(2024, 11, 24, 11, 11, 11);
         when(toDoService.doneToDo(1L)).thenAnswer(invocation -> {
             newTodo.setStatus(true);
-            newTodo.setDoneDate(LocalDateTime.of(2024,11,24,11,11,11));
+            newTodo.setDoneDate(expectedDate);
             return newTodo;
         });
 
-        ResponseEntity<ToDo> result = toDoController.doneTask(1L);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertNotNull(result.getBody());
-        assertTrue(result.getBody().isStatus());
-        assertNotNull(result.getBody().getDoneDate());
+        ResultActions result = mockMvc.perform(put("/todos/1/done")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.doneDate").isNotEmpty());
     }
+
 
 }

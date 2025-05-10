@@ -1,9 +1,7 @@
 package com.encora.ToDosBackend.controller;
 
 import com.encora.ToDosBackend.model.ToDo;
-import com.encora.ToDosBackend.service.ToDoServiceImpl;
-import com.encora.ToDosBackend.service.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.encora.ToDosBackend.service.ToDoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8080")
 public class ToDoController implements ToDoApi {
 
-    @Autowired
-    ToDoServiceImpl toDoService;
+    final ToDoService toDoService;
+
+    public ToDoController(ToDoService toDoService){
+        this.toDoService = toDoService;
+    }
 
     @Override
     public ResponseEntity<List<ToDo>> getTodos(
@@ -43,11 +44,6 @@ public class ToDoController implements ToDoApi {
     @Override
     public ResponseEntity<ToDo> updateToDo(@RequestBody(required = true) ToDo task, @PathVariable(required = true)Long id){
         return new ResponseEntity<>(toDoService.updateToDo(task, id), HttpStatus.OK);
-    }
-
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handleException(ValidationException exception){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @Override

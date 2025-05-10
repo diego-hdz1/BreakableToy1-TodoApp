@@ -1,6 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from "react";
 import {PORT} from '../constants';
+import ModalComponent from "./Modal";
+import { useState } from "react";
+
 
 interface FilterProps{
     nameFilter: string;
@@ -13,6 +16,7 @@ interface FilterProps{
     setData: (data:any) => void;
     ordenation: number;
     dateSort: number;
+    fetchStats: () => void;
 }
 
 const Filter: React.FC<FilterProps> = ({
@@ -25,24 +29,32 @@ const Filter: React.FC<FilterProps> = ({
   handleFilterDone,
   setData,
   ordenation,
-  dateSort
+  dateSort,
+  fetchStats
 }) => {
-    const navigator = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const NO_ID_NEEDED = -1;
 
     function addNewToDo(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();    
-        navigator('/add-todo');
+        setIsModalOpen(true);
     }
-
-    function handleFilter(e: React.MouseEvent<HTMLButtonElement>){
-        e.preventDefault();
-        handleNameFilter(nameFilter);
+    
+    function dynamicFilter() {
         let validatedName = encodeURIComponent(nameFilter);
         let url = `http://localhost:${PORT}/todos?nameFilter=${validatedName}&priorityFilter=${filterPriority}&filterDone=${filterDone}&pagination=${pagination}&orderPriority=${ordenation}&orderDate=${dateSort}`;
-        axios.get(url).then((response)=>{
-            setData(response.data);
-        }).catch(error =>{console.log(error);})
+        axios.get(url)
+            .then((response) => {
+                setData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
+
+    useEffect(() => {
+        dynamicFilter();
+    }, [nameFilter, filterPriority, filterDone, pagination, ordenation, dateSort]);
     
     return (
         <div> 
@@ -60,14 +72,13 @@ const Filter: React.FC<FilterProps> = ({
                     <option value={"Done"}>Done</option>
                     <option value={"Undone"}>Undone</option>
                 </select>
-                <button onClick={handleFilter}>Filter</button>
             </form>
             <form className="add-form">
             <button onClick={addNewToDo}>Add To Do</button>
             </form>
+            <ModalComponent currentId = {NO_ID_NEEDED} isModalOpen = {isModalOpen} fetchStats={fetchStats} setIsModalOpen={setIsModalOpen}/>
         </div>
     );
-
 }
 
 export default Filter;

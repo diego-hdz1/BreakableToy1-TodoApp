@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
-import type {TableColumnsType, TableProps} from 'antd';
 import axios from "axios";
-import { To, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {PORT} from '../constants';
-import { Color } from 'antd/es/color-picker';
+import ModalComponent from "./Modal";
+
 
 interface ToDo{
   id: number;
@@ -46,8 +46,12 @@ const TableData: React.FC<TableDataProps> = ({
 
   const navigator = useNavigate();
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentId, setCurrentId] = useState(-1);
   
   const setToDoStatus = (record: ToDo) =>{
+    console.log(record.id);
+    console.log(record.status);
     const url = record.status ? `http://localhost:${PORT}/todos/${record.id}/done` : `http://localhost:9090/todos/${record.id}/undone`;
     axios.put(url).then((response) => { 
       fetchStats();
@@ -87,7 +91,8 @@ const TableData: React.FC<TableDataProps> = ({
     }      
 
     const updateToDo = (toDoId:number)=>{
-      navigator(`/edit-todo/${toDoId}`);
+      setCurrentId(toDoId);
+      setIsModalOpen(true);
     }
   
     const deleteToDo = (toDoId:number)=>{
@@ -200,7 +205,11 @@ const TableData: React.FC<TableDataProps> = ({
     }, [location]);
     
     return(
+      <div>
         <Table<ToDo> columns={columns} dataSource={data} pagination={false} rowKey={(record)=> record.id.toString()}/>
+        <ModalComponent currentId={currentId} isModalOpen = {isModalOpen} fetchStats={fetchStats} setIsModalOpen={setIsModalOpen}/>
+      </div>
+        
     );
 
 }
